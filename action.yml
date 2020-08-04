@@ -1,0 +1,28 @@
+name: 'Waka - Readme'
+author: Athil Cyriac Ajay
+description: 'Add a Wakatime Coding Activity graph in your Readme'
+
+inputs:
+
+  GITHUB_USERNAME:
+    description: 'Your GitHub username'
+    default: ${{ github.repository_owner }}
+    required: false
+
+  CODESTATS_USERNAME:
+    description: 'Your codestats username'
+    required: true
+
+  COMMIT_MESSAGE:
+    description: "Add a commit message of your choice."
+    default: "Updated the Graph with new CodeStat metrics."
+    required: false
+
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+
+branding:
+  icon: 'info'
+  color: 'blue'

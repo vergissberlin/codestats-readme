@@ -1,0 +1,57 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js add codestats
+
+PATH: 
+  /Users/andre.lademann/.platformsh/bin:/Users/andre.lademann/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/Apple/usr/bin:/Applications/Wireshark.app/Contents/MacOS:/Users/andre.lademann/.platformsh/bin:/Users/andre.lademann/.npm-packages/bin:/usr/local/sbin:vendor/bin:/Users/andre.lademann/local/bin:/Users/andre.lademann/local/lib/node_modules/npm/bin/:/Users/andre.lademann/Go/bin:vendor/bin:/usr/local/bin:/Users/andre.lademann/local/bin:/Users/andre.lademann/local/lib/node_modules/npm/bin/:/Users/andre.lademann/Go/bin
+
+Yarn version: 
+  1.22.4
+
+Node version: 
+  12.18.3
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/codestats: Not found
+      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:66987:18)
+      at Request.self.callback (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:140748:22)
+      at Request.emit (events.js:315:20)
+      at Request.<anonymous> (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:141720:10)
+      at Request.emit (events.js:315:20)
+      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:141642:12)
+      at Object.onceWrapper (events.js:421:28)
+      at IncomingMessage.emit (events.js:327:22)
+      at endReadableNT (_stream_readable.js:1220:12)
+      at processTicksAndRejections (internal/process/task_queues.js:84:21)
+
+npm manifest: 
+  {
+    "name": "codestats-readme",
+    "version": "1.0.0",
+    "description": "Add codestats metrics to your readme file",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/vergissberlin/codestats-readme.git"
+    },
+    "keywords": [
+      "codestats"
+    ],
+    "author": "André Lademann",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/vergissberlin/codestats-readme/issues"
+    },
+    "homepage": "https://github.com/vergissberlin/codestats-readme#readme"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
