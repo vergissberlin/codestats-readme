@@ -1,6 +1,6 @@
-name: 'Waka - Readme'
-author: Athil Cyriac Ajay
-description: 'Add a Wakatime Coding Activity graph in your Readme'
+name: 'CodeStats - Readme'
+author: André Lademann
+description: 'Add a codestats coding activity graph in your readme file.'
 
 inputs:
 
@@ -10,12 +10,12 @@ inputs:
     required: false
 
   CODESTATS_USERNAME:
-    description: 'Your codestats username'
+    description: 'Your codestats username.'
     required: true
 
   COMMIT_MESSAGE:
     description: "Add a commit message of your choice."
-    default: "Updated the Graph with new CodeStat metrics."
+    default: "Update the graph with new CodeStat metrics."
     required: false
 
 
