@@ -3,8 +3,7 @@ author: André Lademann
 description: 'Add a codestats coding activity graph in your readme file.'
 
 inputs:
-
-  GITHUB_USERNAME:
+  GIT_USERNAME:
     description: 'Your GitHub username'
     default: ${{ github.repository_owner }}
     required: false
@@ -14,8 +13,8 @@ inputs:
     required: true
 
   COMMIT_MESSAGE:
-    description: "Add a commit message of your choice."
-    default: "Update the graph with new CodeStat metrics."
+    description: 'Add a commit message of your choice.'
+    default: 'Update the graph with new CodeStats metrics.'
     required: false
 
 runs:

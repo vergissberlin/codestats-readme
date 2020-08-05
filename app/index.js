@@ -11,15 +11,10 @@ const options = {
 	url: `https://codestats.net/api/users/${process.env.CODESTATS_USERNAME}`,
 	readmeFile: process.env.README_FILE || 'tests/fixtures/README.md',
 	git: {
-		user: {
-			name: process.env.GIT_USERNAME || 'CodeStats bot',
-			email: process.env.GIT_EMAIL || 'vergissberlin@googlemail.com'
-		},
+		user: process.env.GIT_USERNAME || 'CodeStats bot',
 		message: process.env.COMMIT_MESSAGE || 'Update codestats metrics'
 	}
 }
-
-options.git.user.full = `"${options.git.user.name} <${options.git.user.email}>"`
 
 /**
  * Request callback
@@ -41,7 +36,7 @@ const callback = function (error, response, body) {
  */
 const commitChanges = function () {
 	const git = simpleGit()
-	git.commit(options.git.message, options.readmeFile, { '--author': options.git.user.full }).push()
+	git.commit(options.git.message, options.readmeFile, { '--author': options.git.user }).push()
 }
 
 /**
