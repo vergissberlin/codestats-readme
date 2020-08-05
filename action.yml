@@ -18,7 +18,6 @@ inputs:
     default: "Update the graph with new CodeStat metrics."
     required: false
 
-
 runs:
   using: 'docker'
   image: 'Dockerfile'

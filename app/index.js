@@ -1,11 +1,25 @@
 const request = require('request'),
 	bars = require('bars'),
-	fs = require('fs')
+	fs = require('fs'),
+	simpleGit = require('simple-git')
+
+// Validate
+if (typeof process.env.CODESTATS_USERNAME == 'undefined')
+	throw new Error('InvalidArgumentExcpetion – The CODESTATS_USERNAME has to be set!')
 
 const options = {
-	url: 'https://codestats.net/api/users/vergissberlin',
-	readmeFile: './tests/fixtures/README.md'
+	url: `https://codestats.net/api/users/${process.env.CODESTATS_USERNAME}`,
+	readmeFile: process.env.README_FILE || 'tests/fixtures/README.md',
+	git: {
+		user: {
+			name: process.env.GIT_USERNAME || 'CodeStats bot',
+			email: process.env.GIT_EMAIL || 'vergissberlin@googlemail.com'
+		},
+		message: process.env.COMMIT_MESSAGE || 'Update codestats metrics'
+	}
 }
+
+options.git.user.full = `"${options.git.user.name} <${options.git.user.email}>"`
 
 /**
  * Request callback
@@ -18,17 +32,17 @@ const callback = function (error, response, body) {
 	if (!error && response.statusCode == 200) {
 		const languages = Object.entries(JSON.parse(body).languages)
 		updateReadme(buildChart(languages))
+		commitChanges()
 	}
 }
 
 /**
- * Sort descending.
+ * Commit changes in README file
  */
-
-function sortDescending(a, b) {
-	return b.val - a.val;
-  }
-  
+const commitChanges = function () {
+	const git = simpleGit()
+	git.commit(options.git.message, options.readmeFile, { '--author': options.git.user.full }).push()
+}
 
 /**
  * Build chart with data
@@ -72,4 +86,5 @@ const updateReadme = function (content) {
 	})
 }
 
+// Init request
 request(options, callback)

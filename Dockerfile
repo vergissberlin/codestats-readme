@@ -4,6 +4,6 @@ WORKDIR /app
 
 # Install dependencies.
 ADD /app /app/
-RUN npm i
+RUN yarn
 
 CMD ["node", "/app/index.js"]
