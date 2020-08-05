@@ -1,5 +1,6 @@
 /*
 
+# Includes
 !/.github
 !/app
 !/.gitignore
@@ -7,3 +8,6 @@
 !/Dockerfile
 !/LICENSE
 !/README.md
+
+# Except
+/app/node_modules
