@@ -12,5 +12,5 @@
     Markdown | ████████████████████                       | 9793
 ```
 
-My [CodeStats profile](https://codestats.net/users/vergissberlin) in detail.
+> My [CodeStats profile](https://codestats.net/users/vergissberlin) in detail.
 <!-- END_SECTION:codestats -->
