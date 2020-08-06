@@ -17,6 +17,21 @@ inputs:
     default: 'Update the graph with new CodeStats metrics.'
     required: false
 
+
+  SHOW_TITLE:
+    description: 'Show a title with a Date.'
+    required: false
+
+  SHOW_LINK:
+    description: 'Displayes a link to your codestat profile.'
+    required: false
+  
+  GRAPH_WIDTH:
+    description: 'The width of the graph. [default: 42].'
+    default: '42'
+    required: false
+
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
