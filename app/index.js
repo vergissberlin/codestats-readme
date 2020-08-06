@@ -81,7 +81,7 @@ const buildChart = function (data) {
 const updateReadme = function (content) {
 	fs.readFile(options.readmeFile, 'utf8', function (err, data) {
 		let header = options.show.title ? `*Language experience level (Last update ${new Date().toUTCString()})*\n\n` : '',
-			footer = options.show.link ? `\nMy [CodeStats profile](${options.codestats.profile}) in detail.\n` : ''
+			footer = options.show.link ? `\n> My [CodeStats profile](${options.codestats.profile}) in detail.\n` : ''
 
 		if (err) {
 			return console.log(err)
