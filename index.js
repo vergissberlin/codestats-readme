@@ -3,6 +3,8 @@ const bars = require('bars'),
 	request = require('request'),
 	simpleGit = require('simple-git')
 
+console.log(process.env)
+
 // Validate environment varialbes
 if (typeof process.env.CODESTATS_USERNAME == 'undefined')
 	throw new Error('InvalidArgumentExcpetion – The CODESTATS_USERNAME has to be set!')
