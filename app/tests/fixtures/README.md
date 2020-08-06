@@ -1,14 +1,16 @@
 # That's me, the everyday game developer
 
 <!-- START_SECTION:codestats -->
-```text
-Expericen level (Last update Thu Aug 06 2020 08:45:09 GMT+0200 (GMT+02:00))
+*Language experience level (Last update Thu, 06 Aug 2020 07:15:36 GMT)*
 
-  JavaScript | ██████████████████████████████████████████ | 19527
-         Vue | █████████████████████████████████████████  | 19017
-        YAML | ████████████████████████████████           | 14872
-        HTML | █████████████████████████                  | 11665
+```text
+  JavaScript | ██████████████████████████████████████████ | 20258
+         Vue | ███████████████████████████████████████    | 19017
+        YAML | ███████████████████████████████            | 14994
+        HTML | ████████████████████████                   | 11665
         SCSS | ███████████████████████                    | 10888
-    Markdown | █████████████████████                      | 9776
+    Markdown | ████████████████████                       | 9793
 ```
+
+My [CodeStats profile](https://codestats.net/users/vergissberlin) in detail.
 <!-- END_SECTION:codestats -->
