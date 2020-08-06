@@ -1,5 +1,4 @@
-const 
-	bars = require('bars'),
+const bars = require('bars'),
 	fs = require('fs'),
 	request = require('request'),
 	simpleGit = require('simple-git')
@@ -10,19 +9,19 @@ if (typeof process.env.CODESTATS_USERNAME == 'undefined')
 
 // Options
 const options = {
-	codestats : {
+	codestats: {
 		username: process.env.CODESTATS_USERNAME,
 		url: `https://codestats.net/api/users/${process.env.CODESTATS_USERNAME}`,
-		profile: `https://codestats.net/users/${process.env.CODESTATS_USERNAME}`,
+		profile: `https://codestats.net/users/${process.env.CODESTATS_USERNAME}`
 	},
 	git: {
-		user: process.env.GIT_USERNAME || 'CodeStats bot',
+		username: process.env.GITHUB_USERNAME || 'CodeStats bot',
 		message: process.env.COMMIT_MESSAGE || 'Update codestats metrics'
 	},
 	graph: {
 		width: process.env.GRAPH_WIDTH || 42
 	},
-	readmeFile: process.env.README_FILE || 'tests/fixtures/README.md',
+	readmeFile: process.env.README_FILE || '/data/README.md',
 	show: {
 		title: process.env.SHOW_TITLE || false,
 		link: process.env.SHOW_LINK || false
@@ -49,7 +48,7 @@ const callback = function (error, response, body) {
  */
 const commitChanges = function () {
 	const git = simpleGit()
-	git.commit(options.git.message, options.readmeFile, { '--author': options.git.user }).push()
+	git.commit(options.git.message, options.readmeFile, { '--author': options.git.username }).push()
 }
 
 /**

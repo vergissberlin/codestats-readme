@@ -29,7 +29,7 @@ Please follow the steps below:
 2. Copy the following code and paste it to your new workflow you created at step 1:
 
    ```yml
-   name: CodeStats Readme
+   name: CodeStats – README
 
    on:
      workflow_dispatch:
@@ -44,7 +44,7 @@ Please follow the steps below:
        steps:
          - uses: vergissberlin/codestats-readme@master
            with:
-             USERNAME_CODESTATS: <username>
+             CODESTATS_USERNAME: <username>
    ```
 
 3. Add a comment to your `README.md` like this:
@@ -60,3 +60,17 @@ Please follow the steps below:
 ## Why only the language stats and not other data from the API?
 
 I am a fan of minimal designs and the profile readme is a great way to show off your skills and interests. The CodeStats API, gets us a **lot of data** about a person's **coding activity**. Using up more data via the CodeStats API will clutter the profile readme and hinder your chances on displaying what you provide **value to the community** like the pinned Repositories. You are _**exercising these languages or learning a new language**_, this will also show that you spend some amount of time to learn and exercise your development skills. That's what matters in the end :heart:
+
+## Testing
+
+```bash
+docker build -t vergissberlin/codestats-readme .
+docker run -e CODESTATS_USERNAME=vergissberlin -e README_FILE=/data/README.md -v $PWD/tests/fixtures/README.md:/data/README.md vergissberlin/codestats-readme
+```
+
+### Real repp
+
+```bash
+docker run -e CODESTATS_USERNAME=vergissberlin -e GITHUB_USERNAME=vergissberlin -v $PWD/tests/fixtures/README.md:/data/README.md -v $PWD:/app vergissberlin/codestats-readme
+docker run -it -e CODESTATS_USERNAME=vergissberlin -e GITHUB_USERNAME=vergissberlin -v $PWD:/app vergissberlin/codestats-readme bash
+```

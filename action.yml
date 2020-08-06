@@ -3,9 +3,13 @@ author: André Lademann
 description: 'Add a codestats coding activity graph in your readme file.'
 
 inputs:
-  GIT_USERNAME:
+  GITHUB_USERNAME:
     description: 'Your GitHub username'
     default: ${{ github.repository_owner }}
+    required: false
+  GITHUB_TOKEN:
+    description: 'Your GitHub toben'
+    default: ${{ github.token }}
     required: false
 
   CODESTATS_USERNAME:
@@ -17,7 +21,6 @@ inputs:
     default: 'Update the graph with new CodeStats metrics.'
     required: false
 
-
   SHOW_TITLE:
     description: 'Show a title with a Date.'
     required: false
@@ -25,12 +28,11 @@ inputs:
   SHOW_LINK:
     description: 'Displayes a link to your codestat profile.'
     required: false
-  
+
   GRAPH_WIDTH:
     description: 'The width of the graph. [default: 42].'
     default: '42'
     required: false
-
 
 runs:
   using: 'docker'
