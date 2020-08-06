@@ -1,5 +1,6 @@
 /.github
 /Dockerfile
+/example
 /LICENSE
 /REAMDME.md
 /tests
