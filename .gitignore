@@ -1,13 +1,17 @@
 /*
 
 # Includes
+!/.dockerignore
 !/.github
-!/app
 !/.gitignore
 !/action.yml
 !/Dockerfile
 !/LICENSE
+!/index.js
+!/package.json
+!/tests
 !/README.md
+!/yarn.lock
 
 # Except
 /app/node_modules
