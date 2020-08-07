@@ -8,6 +8,7 @@
 !/Dockerfile
 !/LICENSE
 !/index.js
+!/node_modules
 !/package.json
 !/tests
 !/README.md
