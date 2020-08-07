@@ -24,8 +24,8 @@ const options = {
 		width: process.env.INPUT_GRAPH_WIDTH || 42
 	},
 	readmeFile: process.env.INPUT_README_FILE
-		? `${process.env.HOME}/${process.env.INPUT_README_FILE}`
-		: `${process.env.HOME}/README.md`,
+		? `${process.env.INPUT_README_FILE}`
+		: `./README.md`,
 	show: {
 		title: process.env.INPUT_SHOW_TITLE || false,
 		link: process.env.INPUT_SHOW_LINK || false
