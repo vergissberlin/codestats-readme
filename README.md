@@ -1,4 +1,4 @@
-# Dev Metrics in Readme
+# Dev Metrics in Readme ![CodeStats – README](https://github.com/vergissberlin/vergissberlin/workflows/CodeStats%20%E2%80%93%20README/badge.svg)
 
 [CodeStats](https://codestats.net/) Weekly Metrics on your Profile Readme:
 
