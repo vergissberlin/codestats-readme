@@ -118,3 +118,18 @@ const updateReadme = function (content) {
 
 // Init request
 request(options.codestats, callback)
+
+if (typeof process.env.INPUT_DEBUG !== 'undefined') {
+	const { exec } = require('child_process')
+	exec('cat README.md', (error, stdout, stderr) => {
+		if (error) {
+			console.log(`error: ${error.message}`)
+			return
+		}
+		if (stderr) {
+			console.log(`stderr: ${stderr}`)
+			return
+		}
+		console.log(`stdout: ${stdout}`)
+	})
+}
