@@ -6,27 +6,29 @@ const bars = require('bars'),
 console.log(process.env)
 
 // Validate environment varialbes
-if (typeof process.env.CODESTATS_USERNAME == 'undefined')
+if (typeof process.env.INPUT_CODESTATS_USERNAME == 'undefined')
 	throw new Error('InvalidArgumentExcpetion – The CODESTATS_USERNAME has to be set!')
 
 // Options
 const options = {
 	codestats: {
-		username: process.env.CODESTATS_USERNAME,
-		url: `https://codestats.net/api/users/${process.env.CODESTATS_USERNAME}`,
-		profile: `https://codestats.net/users/${process.env.CODESTATS_USERNAME}`
+		username: process.env.INPUT_CODESTATS_USERNAME,
+		url: `https://codestats.net/api/users/${process.env.INPUT_CODESTATS_USERNAME}`,
+		profile: `https://codestats.net/users/${process.env.INPUT_CODESTATS_USERNAME}`
 	},
 	git: {
-		username: process.env.GITHUB_USERNAME || 'CodeStats bot',
-		message: process.env.COMMIT_MESSAGE || 'Update codestats metrics'
+		username: process.env.INPUT_GITHUB_USERNAME || 'CodeStats bot',
+		message: process.env.INPUT_COMMIT_MESSAGE || 'Update codestats metrics'
 	},
 	graph: {
-		width: process.env.GRAPH_WIDTH || 42
+		width: process.env.INPUT_GRAPH_WIDTH || 42
 	},
-	readmeFile: process.env.README_FILE || '/data/README.md',
+	readmeFile: process.env.INPUT_README_FILE
+		? `${process.env.INPUT_HOME}/${process.env.INPUT_README_FILE}`
+		: `${process.env.INPUT_HOME}/README.md`,
 	show: {
-		title: process.env.SHOW_TITLE || false,
-		link: process.env.SHOW_LINK || false
+		title: process.env.INPUT_SHOW_TITLE || false,
+		link: process.env.INPUT_SHOW_LINK || false
 	}
 }
 

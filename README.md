@@ -68,6 +68,11 @@ docker build -t vergissberlin/codestats-readme .
 docker run -e CODESTATS_USERNAME=vergissberlin -e README_FILE=/data/README.md -v $PWD/tests/fixtures/README.md:/data/README.md vergissberlin/codestats-readme
 ```
 
+```bash
+docker build -t docker.pkg.github.com/vergissberlin/codestats-readme/master .
+docker push docker.pkg.github.com/vergissberlin/codestats-readme/master
+```
+
 ### Real repp
 
 ```bash
