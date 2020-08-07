@@ -6,5 +6,4 @@ WORKDIR /app
 ADD . /app/
 RUN yarn
 
-CMD ["ls", "/github/home"]
-ENTRYPOINT  ["node", "/app/index.js"]
+CMD ["node", "/app/index.js"]
