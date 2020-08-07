@@ -3,7 +3,24 @@ const bars = require('bars'),
 	request = require('request'),
 	simpleGit = require('simple-git')
 
-console.log(process.env)
+/**
+ * Debugging
+ */
+if (typeof process.env.INPUT_DEBUG !== 'undefined') {
+	const { exec } = require('child_process')
+	exec('ls -lisa', (error, stdout, stderr) => {
+		if (error) {
+			console.log(`error: ${error.message}`)
+			return
+		}
+		if (stderr) {
+			console.log(`stderr: ${stderr}`)
+			return
+		}
+		console.log(`stdout: ${stdout}`)
+	})
+	console.log(process.env)
+}
 
 // Validate environment varialbes
 if (typeof process.env.INPUT_CODESTATS_USERNAME == 'undefined')
@@ -23,9 +40,7 @@ const options = {
 	graph: {
 		width: process.env.INPUT_GRAPH_WIDTH || 42
 	},
-	readmeFile: process.env.INPUT_README_FILE
-		? `${process.env.INPUT_README_FILE}`
-		: `./README.md`,
+	readmeFile: process.env.INPUT_README_FILE ? `${process.env.INPUT_README_FILE}` : `./README.md`,
 	show: {
 		title: process.env.INPUT_SHOW_TITLE || false,
 		link: process.env.INPUT_SHOW_LINK || false

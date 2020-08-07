@@ -25,6 +25,10 @@ inputs:
     description: 'Show a title with a Date.'
     required: false
 
+  DEBUG:
+    description: 'Debug theaction'
+    required: false
+
   SHOW_LINK:
     description: 'Displayes a link to your codestat profile.'
     required: false
