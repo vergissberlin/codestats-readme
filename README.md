@@ -63,13 +63,27 @@ I am a fan of minimal designs and the profile readme is a great way to show off 
 
 ## Testing
 
+### Docker
+
 ```bash
 docker build -t vergissberlin/codestats-readme .
 docker run \
   -e INPUT_CODESTATS_USERNAME=vergissberlin \
   -e INPUT_README_FILE=/data/README.md \
+  -e INPUT_SHOW_TITLE=true \
+  -e INPUT_SHOW_LINK=true \
   -e INPUT_DEBUG=true \
   -v $PWD/tests/fixtures/README.md:/data/README.md \
   -v $PWD:/app \
   vergissberlin/codestats-readme
+```
+
+### node
+
+```bash
+INPUT_CODESTATS_USERNAME=vergissberlin \
+INPUT_README_FILE=./tests/fixtures/README.md \
+INPUT_SHOW_TITLE=true \
+INPUT_SHOW_LINK=true \
+node index.js
 ```

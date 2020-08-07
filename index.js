@@ -7,18 +7,6 @@ const bars = require('bars'),
  * Debugging
  */
 if (typeof process.env.INPUT_DEBUG !== 'undefined') {
-	const { exec } = require('child_process')
-	exec('ls -lisa', (error, stdout, stderr) => {
-		if (error) {
-			console.log(`error: ${error.message}`)
-			return
-		}
-		if (stderr) {
-			console.log(`stderr: ${stderr}`)
-			return
-		}
-		console.log(`stdout: ${stdout}`)
-	})
 	console.log(process.env)
 }
 
@@ -57,8 +45,7 @@ const options = {
 const callback = function (error, response, body) {
 	if (!error && response.statusCode == 200) {
 		const languages = Object.entries(JSON.parse(body).languages)
-		updateReadme(buildChart(languages))
-		commitChanges()
+		updateReadme(buildChart(languages), commitChanges)
 	}
 }
 
@@ -67,6 +54,10 @@ const callback = function (error, response, body) {
  */
 const commitChanges = function () {
 	const git = simpleGit()
+	if (typeof process.env.INPUT_DEBUG !== 'undefined') {
+		console.log('::: Commit changes')
+		git.status()
+	}
 	git.commit(options.git.message, options.readmeFile, { '--author': options.git.username }).push()
 }
 
@@ -95,14 +86,16 @@ const buildChart = function (data) {
  * Update the content of readme file
  *
  * @param {*} content
+ * @param {*} callback
+ * @returns {void}
  */
-const updateReadme = function (content) {
+const updateReadme = function (content, callback) {
 	fs.readFile(options.readmeFile, 'utf8', function (err, data) {
 		let header = options.show.title ? `*Language experience level (Last update ${new Date().toUTCString()})*\n\n` : '',
 			footer = options.show.link ? `\n> My [CodeStats profile](${options.codestats.profile}) in detail.\n` : ''
 
 		if (err) {
-			return console.log(err)
+			console.log(err)
 		}
 		let replacement = `<!-- START_SECTION:codestats -->\n${header}\`\`\`text\n${content}\`\`\`\n${footer}<!-- END_SECTION:codestats -->`
 		let result = data.replace(
@@ -111,25 +104,11 @@ const updateReadme = function (content) {
 		)
 
 		fs.writeFile(options.readmeFile, result, 'utf8', function (err) {
-			if (err) return console.log(err)
+			if (err) console.log(err)
+			callback()
 		})
 	})
 }
 
 // Init request
 request(options.codestats, callback)
-
-if (typeof process.env.INPUT_DEBUG !== 'undefined') {
-	const { exec } = require('child_process')
-	exec(`cat ${options.readmeFile}`, (error, stdout, stderr) => {
-		if (error) {
-			console.log(`error: ${error.message}`)
-			return
-		}
-		if (stderr) {
-			console.log(`stderr: ${stderr}`)
-			return
-		}
-		console.log(`stdout: ${stdout}`)
-	})
-}
