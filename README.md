@@ -50,8 +50,8 @@ Please follow the steps below:
 3. Add a comment to your `README.md` like this:
 
    ```md
-   <!--START_SECTION:codestats-->
-   <!--END_SECTION:codestats-->
+   <!-- START_SECTION:codestats -->
+   <!-- END_SECTION:codestats -->
    ```
 
 4. Go to Workflows menu (mentioned in step 1), click `CodeStats Readme`, click `Run workflow`.
@@ -65,17 +65,11 @@ I am a fan of minimal designs and the profile readme is a great way to show off 
 
 ```bash
 docker build -t vergissberlin/codestats-readme .
-docker run -e CODESTATS_USERNAME=vergissberlin -e README_FILE=/data/README.md -v $PWD/tests/fixtures/README.md:/data/README.md vergissberlin/codestats-readme
-```
-
-```bash
-docker build -t docker.pkg.github.com/vergissberlin/codestats-readme/master .
-docker push docker.pkg.github.com/vergissberlin/codestats-readme/master
-```
-
-### Real repp
-
-```bash
-docker run -e CODESTATS_USERNAME=vergissberlin -e GITHUB_USERNAME=vergissberlin -v $PWD/tests/fixtures/README.md:/data/README.md -v $PWD:/app vergissberlin/codestats-readme
-docker run -it -e CODESTATS_USERNAME=vergissberlin -e GITHUB_USERNAME=vergissberlin -v $PWD:/app vergissberlin/codestats-readme bash
+docker run \
+  -e INPUT_CODESTATS_USERNAME=vergissberlin \
+  -e INPUT_README_FILE=/data/README.md \
+  -e INPUT_DEBUG=true \
+  -v $PWD/tests/fixtures/README.md:/data/README.md \
+  -v $PWD:/app \
+  vergissberlin/codestats-readme
 ```

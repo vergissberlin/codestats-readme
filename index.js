@@ -121,7 +121,7 @@ request(options.codestats, callback)
 
 if (typeof process.env.INPUT_DEBUG !== 'undefined') {
 	const { exec } = require('child_process')
-	exec('cat README.md', (error, stdout, stderr) => {
+	exec(`cat ${options.readmeFile}`, (error, stdout, stderr) => {
 		if (error) {
 			console.log(`error: ${error.message}`)
 			return
