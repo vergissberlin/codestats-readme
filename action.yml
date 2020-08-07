@@ -39,14 +39,10 @@ inputs:
     required: false
 
 # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-javascript-actions
-#runs:
-#  using: 'node12'
-#  pre: 'yarn'
-#  main: 'index.js'
-
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: 'node12'
+  pre: 'yarn'
+  main: 'index.js'
 
 branding:
   icon: 'info'

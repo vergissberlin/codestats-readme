@@ -17,21 +17,22 @@ if (typeof process.env.INPUT_CODESTATS_USERNAME == 'undefined')
 // Options
 const options = {
 	codestats: {
-		username: process.env.INPUT_CODESTATS_USERNAME,
+		username: String(process.env.INPUT_CODESTATS_USERNAME),
 		url: `https://codestats.net/api/users/${process.env.INPUT_CODESTATS_USERNAME}`,
 		profile: `https://codestats.net/users/${process.env.INPUT_CODESTATS_USERNAME}`
 	},
 	git: {
-		username: process.env.INPUT_GITHUB_USERNAME || 'CodeStats bot',
-		message: process.env.INPUT_COMMIT_MESSAGE || 'Update codestats metrics'
+		username: String(process.env.GITHUB_ACTOR) || 'CodeStats bot',
+		message: String(process.env.INPUT_COMMIT_MESSAGE) || 'Update codestats metrics',
+		token: String(process.env.INPUT_GITHUB_TOKEN)
 	},
 	graph: {
-		width: process.env.INPUT_GRAPH_WIDTH || 42
+		width: Number(process.env.INPUT_GRAPH_WIDTH) || 42
 	},
-	readmeFile: process.env.INPUT_README_FILE ? `${process.env.INPUT_README_FILE}` : `./README.md`,
+	readmeFile: String(process.env.INPUT_README_FILE) ? `${process.env.INPUT_README_FILE}` : `./README.md`,
 	show: {
-		title: process.env.INPUT_SHOW_TITLE || false,
-		link: process.env.INPUT_SHOW_LINK || false
+		title: Boolean(process.env.INPUT_SHOW_TITLE) || false,
+		link: Boolean(process.env.INPUT_SHOW_LINK) || false
 	}
 }
 
