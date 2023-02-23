@@ -1,4 +1,4 @@
-const bars = require('bars')
+import * as bars from 'bars'
 
 // customized
 var data = {
@@ -26,4 +26,4 @@ var addDataDynamic = {
 
 data = Object.assign(data, addDataDynamic)
 
-console.log(bars(data, { bar: '█', width: 40, sort: true, limit: 2 }))
+console.log(bars(data, {bar: '█', width: 40, sort: true, limit: 2}))
