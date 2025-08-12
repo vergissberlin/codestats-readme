@@ -28,6 +28,6 @@
 		"simple-git": "^2.17.0"
 	},
 	"devDependencies": {
-		"nock": "^13.1.1"
+		"nock": "^14.0.0"
 	}
 }
