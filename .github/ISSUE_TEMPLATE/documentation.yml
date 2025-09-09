@@ -1,0 +1,106 @@
+name: 📚 Documentation
+description: Report missing, unclear, or incorrect documentation
+title: '[Docs]: '
+labels: ['documentation', 'needs-triage']
+projects: ['vergissberlin/1']
+assignees:
+  - vergissberlin
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve our documentation!
+
+        Before submitting, please search existing issues to avoid duplicates.
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation type
+      description: What type of documentation issue is this?
+      options:
+        - 'Missing documentation'
+        - 'Incorrect information'
+        - 'Unclear instructions'
+        - 'Typo or grammar issue'
+        - 'Outdated information'
+        - "Code examples don't work"
+        - 'Other'
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: Location
+      description: Where did you find this documentation issue?
+      placeholder: |
+        e.g., README.md, CONTRIBUTING.md, GitHub Actions documentation, inline code comments
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-content
+    attributes:
+      label: Current content
+      description: What does the current documentation say? (copy/paste the problematic section)
+      render: markdown
+
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: Issue description
+      description: What's wrong with the current documentation?
+      placeholder: The documentation is unclear because...
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested-improvement
+    attributes:
+      label: Suggested improvement
+      description: How should this be fixed or improved?
+      placeholder: |
+        The documentation should explain...
+        Add an example showing...
+        Clarify that...
+
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Target audience
+      description: Who would benefit most from this documentation improvement?
+      options:
+        - 'New users'
+        - 'Experienced users'
+        - 'Contributors/developers'
+        - 'All users'
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add any other context about the documentation issue here.
+      placeholder: |
+        This affected me when I was trying to...
+        Similar projects handle this by...
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Would you be interested in contributing to improve this documentation?
+      options:
+        - label: I'd be willing to submit a PR to fix this
+          required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/vergissberlin/codestats-readme/blob/main/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

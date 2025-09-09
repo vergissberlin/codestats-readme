@@ -1,0 +1,107 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement for CodeStats README
+title: '[Feature]: '
+labels: ['enhancement', 'needs-triage']
+projects: ['vergissberlin/1']
+assignees:
+  - vergissberlin
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest a new feature!
+
+        Before submitting, please search existing issues and discussions to avoid duplicates.
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature description
+      description: A clear and concise description of what you want to happen.
+      placeholder: I would like to see...
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem-statement
+    attributes:
+      label: Problem statement
+      description: What problem would this feature solve? What's the motivation?
+      placeholder: I'm always frustrated when...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed solution
+      description: How do you envision this feature working?
+      placeholder: The feature should work like...
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Have you considered any alternative solutions or workarounds?
+      placeholder: I've also considered...
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Implementation complexity
+      description: How complex do you think this feature would be to implement?
+      options:
+        - 'Simple (minor changes)'
+        - 'Moderate (some refactoring needed)'
+        - 'Complex (major changes required)'
+        - "I don't know"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - 'Low (nice to have)'
+        - 'Medium (would be helpful)'
+        - 'High (important for my workflow)'
+        - 'Critical (blocks my usage)'
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      description: Describe your specific use case and how this feature would help.
+      placeholder: |
+        I maintain a repository where...
+        This feature would help me...
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add any other context, screenshots, mockups, or related issues about the feature request here.
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Would you be interested in contributing to this feature?
+      options:
+        - label: I'd be willing to contribute to this feature
+          required: false
+        - label: I'd be willing to help with testing
+          required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/vergissberlin/codestats-readme/blob/main/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

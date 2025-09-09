@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🤝 Discussion Forum
+    url: https://github.com/vergissberlin/codestats-readme/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: 📖 Documentation
+    url: https://github.com/vergissberlin/codestats-readme#readme
+    about: Check our documentation for usage instructions
+  - name: 🔒 Security Issues
+    url: https://github.com/vergissberlin/codestats-readme/security
+    about: Please report security vulnerabilities privately

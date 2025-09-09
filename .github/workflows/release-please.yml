@@ -25,7 +25,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
-          command: manifest
 
   build-and-push:
     needs: release-please

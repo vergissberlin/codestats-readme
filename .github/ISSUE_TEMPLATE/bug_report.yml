@@ -1,0 +1,104 @@
+name: 🐛 Bug Report
+description: Report a bug or issue with CodeStats README
+title: '[Bug]: '
+labels: ['bug', 'needs-triage']
+projects: ['vergissberlin/1']
+assignees:
+  - vergissberlin
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+        Before submitting, please search existing issues to avoid duplicates.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear and concise description of what the bug is.
+      placeholder: Tell us what you see!
+      value: 'A bug happened!'
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+      placeholder: Tell us what you expected!
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce this issue?
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Where are you running CodeStats README?
+      options:
+        - GitHub Actions
+        - Docker (local)
+        - Node.js (local)
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: What version of CodeStats README are you running?
+      placeholder: e.g. v1.0.0, latest, main
+    validations:
+      required: true
+
+  - type: textarea
+    id: configuration
+    attributes:
+      label: Configuration
+      description: Please share your action configuration or environment variables
+      render: yaml
+      placeholder: |
+        - name: Update CodeStats
+          uses: vergissberlin/codestats-readme@main
+          with:
+            codestats_username: your-username
+            show_title: true
+            show_link: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code.
+      render: shell
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here, such as screenshots or related issues.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/vergissberlin/codestats-readme/blob/main/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

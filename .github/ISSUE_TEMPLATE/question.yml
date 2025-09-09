@@ -1,0 +1,114 @@
+name: ❓ Question & Support
+description: Ask a question or get help with CodeStats README
+title: '[Question]: '
+labels: ['question', 'needs-triage']
+projects: ['vergissberlin/1']
+assignees:
+  - vergissberlin
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reaching out for help!
+
+        Before asking, please:
+        - Check our [documentation](https://github.com/vergissberlin/codestats-readme#readme)
+        - Search existing [issues](https://github.com/vergissberlin/codestats-readme/issues) and [discussions](https://github.com/vergissberlin/codestats-readme/discussions)
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: What would you like to know?
+      placeholder: I'm trying to understand how to...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: question-type
+    attributes:
+      label: Question type
+      description: What type of question is this?
+      options:
+        - 'Setup and configuration'
+        - 'Usage and features'
+        - 'Troubleshooting'
+        - 'Integration help'
+        - 'Best practices'
+        - 'Other'
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-tried
+    attributes:
+      label: What have you tried?
+      description: What steps have you already taken to solve this?
+      placeholder: |
+        I've tried:
+        1. ...
+        2. ...
+
+  - type: textarea
+    id: current-setup
+    attributes:
+      label: Current setup
+      description: Please share your current configuration
+      render: yaml
+      placeholder: |
+        - name: Update CodeStats
+          uses: vergissberlin/codestats-readme@main
+          with:
+            codestats_username: your-username
+            show_title: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Where are you running CodeStats README?
+      options:
+        - GitHub Actions
+        - Docker (local)
+        - Node.js (local)
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: What version are you using?
+      placeholder: e.g. v1.0.0, latest, main
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add any other context that might help us understand your question better.
+      placeholder: |
+        My goal is to...
+        I'm working on a project that...
+
+  - type: checkboxes
+    id: research
+    attributes:
+      label: Research checklist
+      description: Please confirm you've done the following before asking
+      options:
+        - label: I have read the README and documentation
+          required: true
+        - label: I have searched existing issues and discussions
+          required: true
+        - label: This is not a bug report (use the bug template instead)
+          required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/vergissberlin/codestats-readme/blob/main/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
