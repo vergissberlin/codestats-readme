@@ -8,8 +8,7 @@
 !/Dockerfile
 !/LICENSE
 !/index.js
-!/node_modules
-#!/package.json
+!/package.json
 !/pnpm-lock.yaml
 !/tests
 !/README.md

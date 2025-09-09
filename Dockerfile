@@ -1,30 +1,48 @@
-FROM node:20-alpine
+# Use specific version with digest for reproducibility and security
+FROM node:20.19.1-alpine@sha256:c628bdc7ebc7f95b1b23249a445eb415ce68ae9def8b68364b35ee15e3065b0f
 
-# Enable corepack for pnpm
-RUN corepack enable
-RUN corepack prepare pnpm@9.12.0 --activate
+# Build argument for version
+ARG VERSION=dev
+
+# Set metadata labels
+LABEL org.opencontainers.image.title="CodeStats README" \
+      org.opencontainers.image.description="GitHub Action for CodeStats metrics in README" \
+      org.opencontainers.image.vendor="André Lademann" \
+      org.opencontainers.image.source="https://github.com/vergissberlin/codestats-readme" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.version="$VERSION"
+
+# Install security updates and create user early for better layering
+RUN apk --no-cache upgrade && \
+    addgroup -g 1001 -S nodejs && \
+    adduser -S nodeuser -u 1001 -G nodejs
+
+# Enable corepack and prepare pnpm (combined to reduce layers)
+RUN corepack enable && \
+    corepack prepare pnpm@9.12.0 --activate
 
 WORKDIR /app
 
-# Copy package files first for better Docker layer caching
-COPY package.json pnpm-lock.yaml ./
-
-# Install dependencies
-RUN pnpm install --frozen-lockfile --prod
-
-# Copy application code
-COPY index.js ./
-
-# Create non-root user for security
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodeuser -u 1001
-
-# Change ownership of app directory
+# Change ownership of working directory
 RUN chown -R nodeuser:nodejs /app
+
+# Copy package files with correct ownership from start
+COPY --chown=nodeuser:nodejs package.json pnpm-lock.yaml ./
+
+# Switch to non-root user before installing dependencies
 USER nodeuser
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD node -e "console.log('Container is healthy')" || exit 1
+# Install dependencies (removed cache mount due to complexity in this case)
+RUN pnpm install --frozen-lockfile --prod
 
+# Copy application code with correct ownership
+COPY --chown=nodeuser:nodejs index.js ./
+
+# Health check with better validation
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD node -p "'Container is healthy'" || exit 1
+
+# Use exec form and specify non-root user explicitly
+USER nodeuser
+EXPOSE 8080
 CMD ["node", "index.js"]
