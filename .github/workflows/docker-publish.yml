@@ -2,9 +2,9 @@ name: Docker
 
 on:
   push:
-    # Publish `master` as Docker `latest` image.
+    # Publish `main` as Docker `latest` image.
     branches:
-      - master
+      - main
 
     # Publish `v1.2.3` tags as releases.
     tags:
@@ -14,8 +14,7 @@ on:
   pull_request:
 
 env:
-  # TODO: Change variable to your image's name.
-  IMAGE_NAME: image
+  IMAGE_NAME: codestats-readme
 
 jobs:
   # Run tests.
@@ -24,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -66,32 +65,38 @@ jobs:
     if: github.event_name == 'push'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
 
-      - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+      - name: Log into GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Push image
+      - name: Extract metadata
+        id: meta
         run: |
-          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
-
+          # Generate image name
+          IMAGE_ID=ghcr.io/${{ github.repository }}
+          
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-
+          
           # Strip git ref prefix from version
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-
+          
           # Strip "v" prefix from tag name
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          
+          # Use Docker `latest` tag convention for main branch
+          [ "$VERSION" == "main" ] && VERSION=latest
+          
+          echo "IMAGE_ID=$IMAGE_ID" >> $GITHUB_OUTPUT
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "FULL_TAG=$IMAGE_ID:$VERSION" >> $GITHUB_OUTPUT
 
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
-
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+      - name: Push image to GitHub Container Registry
+        run: |
+          docker tag $IMAGE_NAME ${{ steps.meta.outputs.FULL_TAG }}
+          docker push ${{ steps.meta.outputs.FULL_TAG }}
+          echo "📦 Docker image pushed: ${{ steps.meta.outputs.FULL_TAG }}"

@@ -42,7 +42,7 @@ Please follow the steps below:
        name: Update this repo's README
        runs-on: ubuntu-latest
        steps:
-         - uses: vergissberlin/codestats-readme@master
+         - uses: vergissberlin/codestats-readme@main
            with:
              CODESTATS_USERNAME: <username>
    ```
@@ -61,9 +61,23 @@ Please follow the steps below:
 
 I am a fan of minimal designs and the profile readme is a great way to show off your skills and interests. The CodeStats API, gets us a **lot of data** about a person's **coding activity**. Using up more data via the CodeStats API will clutter the profile readme and hinder your chances on displaying what you provide **value to the community** like the pinned Repositories. You are _**exercising these languages or learning a new language**_, this will also show that you spend some amount of time to learn and exercise your development skills. That's what matters in the end :heart:
 
+## Usage as Docker Image
+
+The action is also available as a Docker image, which can be used in any CI/CD system:
+
+```bash
+# Using GitHub Container Registry (recommended)
+docker run --rm -v "$PWD:/workspace" -w /workspace \
+  -e CODESTATS_USERNAME=your_username \
+  -e GITHUB_TOKEN=your_token \
+  ghcr.io/vergissberlin/codestats-readme:latest
+```
+
+> **Note**: The Docker image is automatically built and pushed to [GitHub Container Registry](https://github.com/vergissberlin/codestats-readme/pkgs/container/codestats-readme) on every release.
+
 ## Testing
 
-### Docker
+### Docker (Local Development)
 
 ```bash
 docker build -t vergissberlin/codestats-readme .
