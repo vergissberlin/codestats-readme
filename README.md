@@ -1,5 +1,12 @@
 # CodeStats README
 
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/vergissberlin/codestats-readme?style=flat-square)](https://github.com/vergissberlin/codestats-readme/releases)
+[![GitHub Marketplace](https://img.shields.io/badge/GitHub-Marketplace-blue?style=flat-square&logo=github)](https://github.com/marketplace/actions/codestats-readme)
+[![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?style=flat-square)](./CONTRIBUTING.md#testing)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/vergissberlin/codestats-readme/test.yml?branch=main&style=flat-square)](https://github.com/vergissberlin/codestats-readme/actions)
+[![Node.js](https://img.shields.io/badge/node.js-20-green?style=flat-square&logo=node.js)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](https://opensource.org/licenses/MIT)
+
 > 📊 A GitHub Action that automatically updates your README with your [CodeStats](https://codestats.net/) programming statistics
 
 Show off your coding activity with beautiful ASCII bar charts directly in your profile README!
@@ -90,6 +97,7 @@ All configuration is done through workflow inputs:
 - ⚡ **Fast & Reliable** - Built with Node.js 20 and comprehensive tests
 - 🐳 **Docker Support** - Available as container image
 - 🔧 **Customizable** - Multiple configuration options
+- 🏢 **GitHub Marketplace** - [Available on GitHub Marketplace](https://github.com/marketplace/actions/codestats-readme) for easy discovery
 
 ## 🐳 Docker Usage
 
