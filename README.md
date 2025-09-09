@@ -1,18 +1,9 @@
-# Dev Metrics in Readme
+# CodeStats README
 
-[CodeStats](https://codestats.net/) Weekly Metrics on your Profile Readme:
+> 📊 A GitHub Action that automatically updates your README with your [CodeStats](https://codestats.net/) programming statistics
 
-## Prep work
+Show off your coding activity with beautiful ASCII bar charts directly in your profile README!
 
-1. You need to update the markdown file(.md) with 2 comments. You can refer [here](#update-your-readme) for updating it.
-2. You'll need a [CodeStats](https://codestats.net/) account.
-3. Your profile has to be public. (Settings)
-
-## Update your README.md
-
-Add a comment to your `README.md` like this:
-
-```md
 <!-- START_SECTION:codestats -->
 ```text
     Markdown | ██████████████████████████████████████████ | 220306
@@ -23,52 +14,110 @@ Add a comment to your `README.md` like this:
         YAML | ██████████████                             | 73315
 ```
 <!-- END_SECTION:codestats -->
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+1. A [CodeStats](https://codestats.net/) account with a **public profile**
+2. The special markers in your README (see step 2)
+
+### Setup
+
+1. **Add the markers** to your README.md where you want the stats to appear:
+
+   ```md
+   <!-- START_SECTION:codestats -->
+   <!-- END_SECTION:codestats -->
    ```
 
-4. Go to Workflows menu (mentioned in step 1), click `CodeStats Readme`, click `Run workflow`.
-5. Go to your profile page. you will be able to see it.
+2. **Create a workflow** in `.github/workflows/codestats.yml`:
 
-## Why only the language stats and not other data from the API?
+   ```yml
+   name: Update CodeStats
 
-I am a fan of minimal designs and the profile readme is a great way to show off your skills and interests. The CodeStats API, gets us a **lot of data** about a person's **coding activity**. Using up more data via the CodeStats API will clutter the profile readme and hinder your chances on displaying what you provide **value to the community** like the pinned Repositories. You are _**exercising these languages or learning a new language**_, this will also show that you spend some amount of time to learn and exercise your development skills. That's what matters in the end :heart:
+   on:
+     schedule:
+       - cron: '0 0 * * *' # Daily at midnight
+     workflow_dispatch: # Manual trigger
 
-## Usage as Docker Image
+   jobs:
+     update-readme:
+       runs-on: ubuntu-latest
+       permissions:
+         contents: write
+       steps:
+         - uses: vergissberlin/codestats-readme@v0.1.0
+           with:
+             CODESTATS_USERNAME: your-codestats-username
+   ```
 
-The action is also available as a Docker image, which can be used in any CI/CD system:
+3. **Customize** (optional) - see [Configuration](#-configuration) below
+
+4. **Run** the workflow manually or wait for the next scheduled run
+
+## ⚙️ Configuration
+
+All configuration is done through workflow inputs:
+
+| Input | Description | Default | Required |
+|-------|-------------|---------|----------|
+| `CODESTATS_USERNAME` | Your CodeStats username | - | ✅ |
+| `README_FILE` | Path to README file | `./README.md` | ❌ |
+| `SHOW_TITLE` | Show update timestamp | `false` | ❌ |
+| `SHOW_LINK` | Show link to your profile | `false` | ❌ |
+| `GRAPH_WIDTH` | Width of the ASCII bars | `42` | ❌ |
+| `COMMIT_MESSAGE` | Custom commit message | `Update codestats metrics` | ❌ |
+
+### Example with all options:
+
+```yml
+- uses: vergissberlin/codestats-readme@v0.1.0
+  with:
+    CODESTATS_USERNAME: your-username
+    README_FILE: ./profile/README.md
+    SHOW_TITLE: true
+    SHOW_LINK: true
+    GRAPH_WIDTH: 50
+    COMMIT_MESSAGE: "📊 Updated coding stats"
+```
+
+## ✨ Features
+
+- 📊 **Beautiful ASCII Charts** - Clean, visual representation of your coding activity
+- 🎯 **Top 6 Languages** - Shows your most used programming languages
+- 🔄 **Auto-sorted** - Languages sorted by experience points (XPs)
+- ⚡ **Fast & Reliable** - Built with Node.js 20 and comprehensive tests
+- 🐳 **Docker Support** - Available as container image
+- 🔧 **Customizable** - Multiple configuration options
+
+## 🐳 Docker Usage
+
+Run as a standalone container:
 
 ```bash
-# Using GitHub Container Registry (recommended)
 docker run --rm -v "$PWD:/workspace" -w /workspace \
   -e CODESTATS_USERNAME=your_username \
   -e GITHUB_TOKEN=your_token \
   ghcr.io/vergissberlin/codestats-readme:latest
 ```
 
-> **Note**: The Docker image is automatically built and pushed to [GitHub Container Registry](https://github.com/vergissberlin/codestats-readme/pkgs/container/codestats-readme) on every release.
+## 🤝 Contributing
 
-## Testing
+Want to contribute? Check out [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, testing, and contribution guidelines.
 
-### Docker (Local Development)
+## 📄 License
 
-```bash
-docker build -t vergissberlin/codestats-readme .
-docker run \
-  -e INPUT_CODESTATS_USERNAME=vergissberlin \
-  -e INPUT_README_FILE=/data/README.md \
-  -e INPUT_SHOW_TITLE=true \
-  -e INPUT_SHOW_LINK=true \
-  -e INPUT_DEBUG=true \
-  -v $PWD/tests/fixtures/README.md:/data/README.md \
-  -v $PWD:/app \
-  vergissberlin/codestats-readme
-```
+MIT © [André Lademann](https://github.com/vergissberlin)
 
-### node
+## 🙋‍♀️ Support
 
-```bash
-INPUT_CODESTATS_USERNAME=vergissberlin \
-INPUT_README_FILE=./tests/fixtures/README.md \
-INPUT_SHOW_TITLE=true \
-INPUT_SHOW_LINK=true \
-node index.js
-```
+- 📫 **Issues**: [GitHub Issues](https://github.com/vergissberlin/codestats-readme/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/vergissberlin/codestats-readme/discussions)
+- ⭐ **Star this repo** if you find it useful!
+
+---
+
+<div align="center">
+  <sub>Built with ❤️ for the developer community</sub>
+</div>
