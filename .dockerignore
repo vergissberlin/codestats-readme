@@ -1,7 +1,45 @@
-/.github
-/Dockerfile
-/example
-/LICENSE
-/node_modules
-/README.md
-/tests
+# Git and version control
+.git
+.gitignore
+
+# Documentation
+README.md
+CONTRIBUTING.md
+WARP.md
+LICENSE
+
+# CI/CD
+.github/
+Dockerfile
+.dockerignore
+
+# Node.js dependencies (will be installed in container)
+node_modules/
+
+# Package manager files (except lock file which we need)
+npm-debug.log
+yarn-error.log
+.pnpm-debug.log
+*.tgz
+
+# Tests and development
+tests/
+coverage/
+example/
+
+# Development tools
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+*.swp
+*.swo
+
+# Environment files
+.env*
