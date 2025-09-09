@@ -1,6 +1,5 @@
 const bars = require('bars'),
 	fs = require('fs'),
-	request = require('request'),
 	simpleGit = require('simple-git')
 
 /**
@@ -143,10 +142,21 @@ const makeUpdateReadme = function (opts) {
 /**
  * Start the action if called directly
  */
-function start() {
+async function start() {
 	const opts = createOptions()
 	const callback = makeCallback(opts)
-	request(opts.codestats, callback)
+	
+	try {
+		const response = await fetch(opts.codestats.url)
+		if (response.ok) {
+			const body = await response.text()
+			callback(null, { statusCode: response.status }, body)
+		} else {
+			callback(new Error(`HTTP ${response.status}: ${response.statusText}`), response, null)
+		}
+	} catch (error) {
+		callback(error, null, null)
+	}
 }
 
 // Export functions for testing
