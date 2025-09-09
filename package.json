@@ -9,7 +9,7 @@
 		"test:watch": "vitest",
 		"coverage": "vitest run --coverage",
 		"commit": "cz",
-		"prepare": "husky install"
+		"prepare": "husky"
 	},
 	"repository": {
 		"type": "git",
