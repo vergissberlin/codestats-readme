@@ -1,0 +1,15 @@
+{
+  // markdownlint configuration
+  "default": true,
+  "MD003": { "style": "atx" },
+  "MD004": { "style": "dash" },
+  "MD007": { "indent": 2 },
+  "MD010": false,
+  "MD013": { "line_length": 200 },
+  "MD024": { "siblings_only": true },
+  "MD033": false,
+  "MD036": false,
+  "MD040": false,
+  "MD041": false,
+  "MD046": { "style": "fenced" }
+}

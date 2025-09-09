@@ -1,7 +1,8 @@
 # That's me, the everyday game developer
 
 <!-- START_SECTION:codestats -->
-*Language experience level (Last update Fri, 07 Aug 2020 21:51:46 GMT)*
+
+_Language experience level (Last update Fri, 07 Aug 2020 21:51:46 GMT)_
 
 ```text
   JavaScript | ██████████████████████████████████████████ | 22377
@@ -13,4 +14,5 @@
 ```
 
 > My [CodeStats profile](https://codestats.net/users/vergissberlin) in detail.
+
 <!-- END_SECTION:codestats -->

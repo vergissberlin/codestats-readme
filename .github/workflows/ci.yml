@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   test:
@@ -33,9 +33,30 @@ jobs:
       - name: Run coverage
         run: pnpm run coverage
 
+      - name: Check formatting
+        run: pnpm run format:check
+
+      - name: Lint TypeScript
+        run: pnpm run lint:ts
+
+      - name: Lint Markdown
+        run: pnpm run lint:md
+
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run actionlint
+        uses: reviewdog/action-actionlint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-check
+
   docker-build:
     runs-on: ubuntu-latest
-    needs: test
+    needs: [test, actionlint]
     steps:
       - name: Checkout
         uses: actions/checkout@v4

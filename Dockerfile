@@ -35,8 +35,12 @@ USER nodeuser
 # Install dependencies (removed cache mount due to complexity in this case)
 RUN pnpm install --frozen-lockfile --prod
 
-# Copy application code with correct ownership
-COPY --chown=nodeuser:nodejs index.js ./
+# Copy TypeScript source and build configuration
+COPY --chown=nodeuser:nodejs src/ ./src/
+COPY --chown=nodeuser:nodejs tsconfig.json ./
+
+# Build TypeScript
+RUN pnpm run build
 
 # Health check with better validation
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
@@ -45,4 +49,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
 # Use exec form and specify non-root user explicitly
 USER nodeuser
 EXPOSE 8080
-CMD ["node", "index.js"]
+CMD ["node", "dist/index.js"]

@@ -14,17 +14,20 @@ Thank you for your interest in contributing! This document provides all the tech
 ### Getting Started
 
 1. **Fork and clone the repository**:
+
    ```bash
    git clone https://github.com/your-username/codestats-readme.git
    cd codestats-readme
    ```
 
 2. **Install dependencies**:
+
    ```bash
    pnpm install
    ```
 
 3. **Run tests to ensure everything works**:
+
    ```bash
    pnpm test
    ```
@@ -51,11 +54,13 @@ Thank you for your interest in contributing! This document provides all the tech
 The project has comprehensive test coverage (100%) with multiple test types:
 
 ### Run All Tests
+
 ```bash
 pnpm test
 ```
 
 ### Run Tests with Coverage
+
 ```bash
 pnpm coverage
 ```
@@ -125,6 +130,7 @@ docker run \
 ### Error Handling
 
 The application includes robust error handling for:
+
 - Invalid API responses
 - Malformed JSON
 - Missing or invalid language data
@@ -137,23 +143,25 @@ The application includes robust error handling for:
 
 All inputs are prefixed with `INPUT_` in the action environment:
 
-| Variable | Description | Default | Validation |
-|----------|-------------|---------|------------|
-| `INPUT_CODESTATS_USERNAME` | CodeStats username | - | Required, string |
-| `INPUT_README_FILE` | README file path | `./README.md` | Optional, string |
-| `INPUT_SHOW_TITLE` | Show timestamp header | `false` | Optional, boolean |
-| `INPUT_SHOW_LINK` | Show profile link | `false` | Optional, boolean |
-| `INPUT_GRAPH_WIDTH` | Chart width | `42` | Optional, number |
-| `INPUT_COMMIT_MESSAGE` | Git commit message | `Update codestats metrics` | Optional, string |
+| Variable                   | Description           | Default                    | Validation        |
+| -------------------------- | --------------------- | -------------------------- | ----------------- |
+| `INPUT_CODESTATS_USERNAME` | CodeStats username    | -                          | Required, string  |
+| `INPUT_README_FILE`        | README file path      | `./README.md`              | Optional, string  |
+| `INPUT_SHOW_TITLE`         | Show timestamp header | `false`                    | Optional, boolean |
+| `INPUT_SHOW_LINK`          | Show profile link     | `false`                    | Optional, boolean |
+| `INPUT_GRAPH_WIDTH`        | Chart width           | `42`                       | Optional, number  |
+| `INPUT_COMMIT_MESSAGE`     | Git commit message    | `Update codestats metrics` | Optional, string  |
 
 ### API Integration
 
 The action uses the CodeStats API endpoint:
+
 ```
 https://codestats.net/api/users/{username}
 ```
 
 Expected response structure:
+
 ```javascript
 {
   "user": "username",
@@ -180,6 +188,7 @@ Expected response structure:
 ### GitHub Release
 
 Releases are created manually on GitHub with:
+
 - Release notes describing changes
 - Automatic Docker image build via GitHub Actions
 - Package registry updates
@@ -210,6 +219,7 @@ INPUT_DEBUG=true INPUT_CODESTATS_USERNAME=username node index.js
 ### Log Analysis
 
 The application logs:
+
 - Environment variables (in debug mode)
 - API request/response details
 - File operation results
@@ -229,6 +239,7 @@ The application logs:
 ### Linting
 
 Code style is enforced through:
+
 - ESLint configuration
 - Prettier formatting
 - Vitest for testing
@@ -237,6 +248,7 @@ Code style is enforced through:
 ### Commit Messages
 
 Follow conventional commits:
+
 ```
 feat(api): add new CodeStats endpoint support
 fix(chart): handle zero XP values correctly

@@ -10,7 +10,7 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 This is a **Node.js GitHub Action** with a simple, focused architecture:
 
-- **Runtime**: Node 12 (as specified in `action.yml`)  
+- **Runtime**: Node 12 (as specified in `action.yml`)
 - **Package Manager**: Yarn (lockfile present)
 - **Entry Point**: `index.js` - single-file implementation
 - **Action Type**: JavaScript action (`runs.using: 'node12'`)
@@ -19,7 +19,7 @@ This is a **Node.js GitHub Action** with a simple, focused architecture:
 
 - **`index.js`**: Main implementation containing:
   - CodeStats API integration (`request` library)
-  - Chart generation using the `bars` library  
+  - Chart generation using the `bars` library
   - README file manipulation with regex-based replacement
   - Git operations via `simple-git` for committing changes
 - **`action.yml`**: Action metadata and input/output definitions
@@ -39,6 +39,7 @@ This is a **Node.js GitHub Action** with a simple, focused architecture:
 ### Local Development
 
 **Node.js approach**:
+
 ```bash
 # Install dependencies
 yarn install
@@ -52,6 +53,7 @@ node index.js
 ```
 
 **Docker approach**:
+
 ```bash
 # Build Docker image
 docker build -t vergissberlin/codestats-readme .
@@ -71,12 +73,14 @@ docker run \
 ### Testing
 
 The project uses exploratory test files rather than a formal test runner:
+
 - `tests/bar.js` - Tests the `bars` chart generation library
 - `tests/git.js` - Tests Git operations with `simple-git`
 - `tests/replace.js` - Tests README content replacement logic
 - `tests/fixtures/README.md` - Sample README for testing
 
 Run individual test components:
+
 ```bash
 node tests/bar.js
 node tests/git.js
@@ -87,16 +91,16 @@ node tests/replace.js
 
 ### Action Inputs (action.yml)
 
-| Input | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `CODESTATS_USERNAME` | Yes | - | CodeStats username |
-| `GITHUB_USERNAME` | No | `${{ github.repository_owner }}` | GitHub username |
-| `GITHUB_TOKEN` | No | `${{ github.token }}` | GitHub token |
-| `COMMIT_MESSAGE` | No | `'Update the graph with new CodeStats metrics.'` | Commit message |
-| `SHOW_TITLE` | No | `false` | Show title with date |
-| `SHOW_LINK` | No | `false` | Show link to CodeStats profile |
-| `GRAPH_WIDTH` | No | `42` | Width of the generated chart |
-| `DEBUG` | No | `false` | Enable debug logging |
+| Input                | Required | Default                                          | Description                    |
+| -------------------- | -------- | ------------------------------------------------ | ------------------------------ |
+| `CODESTATS_USERNAME` | Yes      | -                                                | CodeStats username             |
+| `GITHUB_USERNAME`    | No       | `${{ github.repository_owner }}`                 | GitHub username                |
+| `GITHUB_TOKEN`       | No       | `${{ github.token }}`                            | GitHub token                   |
+| `COMMIT_MESSAGE`     | No       | `'Update the graph with new CodeStats metrics.'` | Commit message                 |
+| `SHOW_TITLE`         | No       | `false`                                          | Show title with date           |
+| `SHOW_LINK`          | No       | `false`                                          | Show link to CodeStats profile |
+| `GRAPH_WIDTH`        | No       | `42`                                             | Width of the generated chart   |
+| `DEBUG`              | No       | `false`                                          | Enable debug logging           |
 
 ### Usage in Workflows
 
@@ -106,7 +110,7 @@ name: CodeStats – README
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'  # Daily at midnight UTC
+    - cron: '0 0 * * *' # Daily at midnight UTC
 
 jobs:
   update-readme:
@@ -121,6 +125,7 @@ jobs:
 ### README Integration
 
 Add these markers to your README.md where you want the stats to appear:
+
 ```md
 <!--START_SECTION:codestats-->
 <!--END_SECTION:codestats-->
@@ -129,17 +134,20 @@ Add these markers to your README.md where you want the stats to appear:
 ## Dependencies
 
 ### Production Dependencies
+
 - `bars` (jstrace/bars) - ASCII chart generation
-- `child_process` - Process execution utilities  
+- `child_process` - Process execution utilities
 - `request` - HTTP client for CodeStats API
 - `simple-git` - Git operations
 
-### Development Dependencies  
+### Development Dependencies
+
 - `nock` - HTTP mocking for tests
 
 ## CI/CD
 
 The project includes GitHub Actions workflow for Docker publishing (`/.github/workflows/docker-publish.yml`):
+
 - Builds and tests on push to master and PR events
 - Publishes Docker images to GitHub Packages
 - Uses Node 12 runtime environment
@@ -147,9 +155,11 @@ The project includes GitHub Actions workflow for Docker publishing (`/.github/wo
 ## Troubleshooting
 
 ### Debug Mode
+
 Set `INPUT_DEBUG=true` to enable verbose logging of environment variables and Git operations.
 
 ### Common Issues
+
 - **API Failures**: Ensure CodeStats username exists and profile is public
 - **Git Commit Issues**: Verify GitHub token has appropriate repository permissions
 - **Regex Replacement**: Ensure README contains the exact comment markers format
@@ -157,8 +167,9 @@ Set `INPUT_DEBUG=true` to enable verbose logging of environment variables and Gi
 ## Rules Compliance
 
 Per your rules:
+
 - All documentation is in English and Markdown format
-- Use ellipsis character (…) instead of three dots  
+- Use ellipsis character (…) instead of three dots
 - Follow Conventional Commits specification for any changes
 - For process diagrams, use drawio as the preferred tool
 - When referencing dates like 2021-05-12T14:48:04Z, format as 12. Mai 2021
