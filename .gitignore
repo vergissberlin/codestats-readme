@@ -1,19 +1,10 @@
-/*
-
-# Includes
-!/.dockerignore
-!/.github
-!/.gitignore
-!/action.yml
-!/Dockerfile
-!/LICENSE
-!/index.js
-!/package.json
-!/pnpm-lock.yaml
-!/tests
-!/README.md
-!/CONTRIBUTING.md
-
-
-# Except
-/app/node_modules
+/node_modules
+/dist
+/coverage
+/build
+/dist
+/coverage
+/build
+/dist
+/coverage
+/build
