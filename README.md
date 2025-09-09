@@ -13,45 +13,16 @@
 Add a comment to your `README.md` like this:
 
 ```md
-<!--START_SECTION:codestats-->
-<!--END_SECTION:codestats-->
+<!-- START_SECTION:codestats -->
+```text
+    Markdown | ██████████████████████████████████████████ | 220306
+  JavaScript | ████████████████████████████████████       | 188377
+         Vue | ███████████████████████████                | 143143
+        HTML | ██████████████████████████                 | 137284
+          Go | ████████████████                           | 82348
+        YAML | ██████████████                             | 73315
 ```
-
-These lines will be our entry-points for the dev metrics.
-
-### Profile Repository
-
-_If you're executing the workflow on your Profile Repository (`<username>/<username>`)_
-
-Please follow the steps below:
-
-1. Go to your `<username>/<username>/actions`, hit `New workflow`, `set up a workflow yourself`, delete all the default content github made for you.
-2. Copy the following code and paste it to your new workflow you created at step 1:
-
-   ```yml
-   name: CodeStats – README
-
-   on:
-     workflow_dispatch:
-     schedule:
-       # Runs at 12am UTC
-       - cron: '0 0 * * *'
-
-   jobs:
-     update-readme:
-       name: Update this repo's README
-       runs-on: ubuntu-latest
-       steps:
-         - uses: vergissberlin/codestats-readme@main
-           with:
-             CODESTATS_USERNAME: <username>
-   ```
-
-3. Add a comment to your `README.md` like this:
-
-   ```md
-   <!-- START_SECTION:codestats -->
-   <!-- END_SECTION:codestats -->
+<!-- END_SECTION:codestats -->
    ```
 
 4. Go to Workflows menu (mentioned in step 1), click `CodeStats Readme`, click `Run workflow`.
