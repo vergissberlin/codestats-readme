@@ -24,14 +24,14 @@ function createOptions() {
 			profile: `https://codestats.net/users/${process.env.INPUT_CODESTATS_USERNAME}`
 		},
 		git: {
-			username: String(process.env.GITHUB_ACTOR) || 'CodeStats bot',
-			message: String(process.env.INPUT_COMMIT_MESSAGE) || 'Update codestats metrics',
-			token: String(process.env.INPUT_GITHUB_TOKEN)
+			username: process.env.GITHUB_ACTOR ? String(process.env.GITHUB_ACTOR) : 'CodeStats bot',
+			message: process.env.INPUT_COMMIT_MESSAGE ? String(process.env.INPUT_COMMIT_MESSAGE) : 'Update codestats metrics',
+			token: process.env.INPUT_GITHUB_TOKEN ? String(process.env.INPUT_GITHUB_TOKEN) : ''
 		},
 		graph: {
 			width: Number(process.env.INPUT_GRAPH_WIDTH) || 42
 		},
-		readmeFile: String(process.env.INPUT_README_FILE) ? `${process.env.INPUT_README_FILE}` : `./README.md`,
+		readmeFile: process.env.INPUT_README_FILE ? String(process.env.INPUT_README_FILE) : './README.md',
 		show: {
 			title: Boolean(process.env.INPUT_SHOW_TITLE) || false,
 			link: Boolean(process.env.INPUT_SHOW_LINK) || false
@@ -84,16 +84,43 @@ const makeCommitChanges = function (opts) {
 const buildChart = function (data, width = 42) {
 	let languageChart = {}
 
-	data.sort(function (a, b) {
+	// Filter out invalid entries and ensure numeric xps values
+	const validData = data.filter(([key, value]) => {
+		return key && 
+			value && 
+			typeof value === 'object' && 
+			typeof value.xps === 'number' && 
+			value.xps >= 0 && 
+			isFinite(value.xps)
+	})
+
+	// Return empty string if no valid data
+	if (validData.length === 0) {
+		return ''
+	}
+
+	validData.sort(function (a, b) {
 		return b[1].xps - a[1].xps
 	})
-	data = data.slice(0, 6)
-	data.forEach(([key, value]) => {
+	const topLanguages = validData.slice(0, 6)
+	topLanguages.forEach(([key, value]) => {
 		languageChart = Object.assign(languageChart, {
 			[key]: value.xps
 		})
 	})
-	return bars(languageChart, { bar: '█', width })
+	
+	// Handle empty chart case
+	if (Object.keys(languageChart).length === 0) {
+		return ''
+	}
+	
+	try {
+		return bars(languageChart, { bar: '█', width })
+	} catch (error) {
+		// If bars library fails, return empty string
+		console.error('Chart generation failed:', error)
+		return ''
+	}
 }
 
 /**
@@ -106,6 +133,15 @@ const buildChart = function (data, width = 42) {
  * @returns {string}
  */
 const replaceCodestatsSection = function (markdown, content, header = '', footer = '') {
+	// Ensure all parameters are strings
+	if (typeof markdown !== 'string') {
+		console.error('replaceCodestatsSection: markdown must be a string')
+		return ''
+	}
+	if (typeof content !== 'string') content = ''
+	if (typeof header !== 'string') header = ''
+	if (typeof footer !== 'string') footer = ''
+	
 	const replacement = `<!-- START_SECTION:codestats -->\n${header}\`\`\`text\n${content}\`\`\`\n${footer}<!-- END_SECTION:codestats -->`
 	return markdown.replace(
 		/((<!--.*START_SECTION:codestats.*-->)([\s\S]+)(<!--.*END_SECTION:codestats.*-->))/g,
