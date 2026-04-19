@@ -1,5 +1,5 @@
 # Use specific version with digest for reproducibility and security
-FROM node:20.19.1-alpine@sha256:c628bdc7ebc7f95b1b23249a445eb415ce68ae9def8b68364b35ee15e3065b0f
+FROM node:20.20.2-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
 
 # Build argument for version
 ARG VERSION=dev
