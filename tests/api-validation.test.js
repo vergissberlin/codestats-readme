@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { buildChart, makeCallback, start, createOptions } from '../index.js';
+import { buildChart, makeCallback, start, createOptions } from '../src/index.js';
 import { mockFetch, mockResponses, errorResponses } from './mocks/codestats-api.mock.js';
 
 // Mock global fetch
@@ -101,11 +101,22 @@ describe('CodeStats API Validation & Regression Tests', () => {
 
       global.fetch.mockImplementation(mockFetch);
 
-      try {
-        await start();
-      } catch (error) {
-        expect(error.message).toBe('Network request failed');
-      }
+      // start() swallows the rejection, logs it and exits with code 1, so assert
+      // on that observable behaviour rather than on a re-thrown error.
+      const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined);
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      await start();
+
+      expect(fetch).toHaveBeenCalledWith('https://codestats.net/api/users/networkerror');
+      expect(errorSpy).toHaveBeenCalledWith(
+        'Application failed:',
+        expect.objectContaining({ message: 'Network request failed' })
+      );
+      expect(exitSpy).toHaveBeenCalledWith(1);
+
+      errorSpy.mockRestore();
+      exitSpy.mockRestore();
     });
   });
 
@@ -196,10 +207,6 @@ describe('CodeStats API Validation & Regression Tests', () => {
 
       const mockCommitChanges = vi.fn();
 
-      // Mock the functions that makeCallback uses
-      const originalMakeUpdateReadme = require('../index.js').makeUpdateReadme;
-      const originalMakeCommitChanges = require('../index.js').makeCommitChanges;
-
       // Create callback
       const callback = makeCallback(mockOpts);
 
@@ -216,7 +223,7 @@ describe('CodeStats API Validation & Regression Tests', () => {
   describe('Environment Variable Validation', () => {
     it('should throw error when CODESTATS_USERNAME is missing', () => {
       expect(() => createOptions()).toThrow(
-        'InvalidArgumentExcpetion – The CODESTATS_USERNAME has to be set!'
+        'InvalidArgumentException – The CODESTATS_USERNAME has to be set!'
       );
     });
 
