@@ -4,7 +4,10 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Project Overview
 
-**codestats-readme** is a GitHub Action that integrates [CodeStats](https://codestats.net/) programming language metrics into README files. The action fetches coding activity data from the CodeStats API and generates visual charts that are automatically inserted into README.md files between special comment markers.
+**codestats-readme** is a GitHub Action that integrates [CodeStats](https://codestats.net/)
+programming language metrics into README files. The action fetches coding activity data from the
+CodeStats API and generates visual charts that are automatically inserted into README.md files
+between special comment markers.
 
 ## Architecture
 

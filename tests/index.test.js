@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import fs from 'fs';
-import { buildChart, replaceCodestatsSection, start } from '../index.js';
+import { buildChart, replaceCodestatsSection, start } from '../src/index.js';
 import { mockFetch, mockResponses } from './mocks/codestats-api.mock.js';
 
 // Mock fs and fetch
