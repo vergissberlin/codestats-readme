@@ -1,0 +1,7 @@
+# pnpm 10+ no longer runs dependency lifecycle scripts by default. That is a secure
+# default (a compromised transitive package cannot execute code at install time), so
+# every package that legitimately needs its install script is allow-listed explicitly.
+#
+# esbuild: links the prebuilt platform binary that vitest and tsx execute.
+allowBuilds:
+  esbuild: true
