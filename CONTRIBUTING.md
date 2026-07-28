@@ -6,10 +6,10 @@ Thank you for your interest in contributing! This document provides all the tech
 
 ### Prerequisites
 
-- Node.js 20 or later
-- pnpm package manager
+- Node.js 24 or later
+- pnpm package manager (version pinned in `package.json#packageManager`, use `corepack enable`)
 - Git
-- Docker (optional, for container testing)
+- Docker (optional, for container testing — this is how the action actually runs in production)
 
 ### Getting Started
 
@@ -35,23 +35,30 @@ Thank you for your interest in contributing! This document provides all the tech
 ## 📁 Project Structure
 
 ```
-├── index.js                 # Main application logic
-├── action.yml              # GitHub Action metadata
-├── Dockerfile              # Container definition
-├── package.json            # Dependencies and scripts
-├── tests/                  # Test suite
-│   ├── api-validation.test.js    # API validation tests
-│   ├── index.test.js             # Unit and integration tests
-│   ├── mocks/                    # Mock data for tests
-│   └── README.md                 # Test documentation
-├── WARP.md                 # Development context for Warp
-├── README.md               # User documentation
-└── CONTRIBUTING.md         # This file
+├── src/
+│   ├── index.ts                   # Main application logic
+│   ├── lib/chart.ts                # Vendored ASCII chart renderer
+│   └── types/index.ts              # Shared TypeScript types
+├── action.yml                      # GitHub Action metadata (Docker-based)
+├── Dockerfile                      # Container definition used by the action
+├── package.json                    # Dependencies and scripts
+├── tests/                          # Vitest test suite
+│   ├── api-validation.test.js      # API/env-var validation and regression tests
+│   ├── index.test.js               # buildChart / replaceCodestatsSection tests
+│   ├── chart.test.js               # Chart renderer tests
+│   ├── git-operations.test.js      # makeUpdateReadme / makeCommitChanges tests
+│   ├── build-chart-error-handling.test.js
+│   ├── mocks/                      # Mock data for tests
+│   └── fixtures/                   # Sample README used for local runs
+├── WARP.md                         # Development context for Warp
+├── README.md                       # User-facing (Marketplace) documentation
+└── CONTRIBUTING.md                 # This file
 ```
 
 ## 🧪 Testing
 
-The project has comprehensive test coverage (100%) with multiple test types:
+The project has broad test coverage (90%+ statements/lines, see `pnpm run coverage`) across
+several test types:
 
 ### Run All Tests
 
@@ -76,7 +83,15 @@ pnpm coverage
    - Validate response structure and error handling
    - Test edge cases and malformed data
 
-3. **Mock Data** (`tests/mocks/codestats-api.mock.js`)
+3. **Chart Renderer Tests** (`tests/chart.test.js`)
+   - Alignment, scaling, and edge cases of the vendored ASCII histogram
+
+4. **Git Operations Tests** (`tests/git-operations.test.js`)
+   - `makeUpdateReadme` with `fs` mocked (read/write/error paths)
+   - `makeCommitChanges` with `simple-git` mocked (commit author format,
+     authenticated remote push, error handling)
+
+5. **Mock Data** (`tests/mocks/codestats-api.mock.js`)
    - Realistic API response scenarios
    - Error conditions (404, 500, network errors)
    - Various user types (beginner, expert, empty)
@@ -86,25 +101,31 @@ pnpm coverage
 For manual testing with your CodeStats account:
 
 ```bash
-# Test locally with environment variables
+# Runs src/index.ts directly via tsx, no build step needed
 INPUT_CODESTATS_USERNAME=your-username \
-INPUT_README_FILE=./test-readme.md \
+INPUT_README_FILE=./tests/fixtures/README.md \
 INPUT_SHOW_TITLE=true \
 INPUT_SHOW_LINK=true \
-node index.js
+pnpm run dev
 ```
 
 ### Docker Testing
 
+The action always runs as a Docker container in production (see `action.yml`), so this is the
+most faithful way to test it locally. GitHub Actions mounts the checkout at
+`/github/workspace` and runs the container with that as its working directory — mirror that
+here so relative paths (like the default `./README.md`) resolve the same way:
+
 ```bash
-# Build and test Docker image
 docker build -t codestats-readme .
-docker run \
+
+docker run --rm \
   -e INPUT_CODESTATS_USERNAME=your-username \
-  -e INPUT_README_FILE=/data/README.md \
+  -e INPUT_README_FILE=./README.md \
   -e INPUT_SHOW_TITLE=true \
   -e INPUT_SHOW_LINK=true \
-  -v $PWD/test-readme.md:/data/README.md \
+  -v "$PWD":/github/workspace \
+  -w /github/workspace \
   codestats-readme
 ```
 
@@ -117,7 +138,9 @@ docker run \
 3. **`buildChart(data, width)`** - Generates ASCII bar charts from language data
 4. **`replaceCodestatsSection(markdown, content, header, footer)`** - Updates README content
 5. **`makeUpdateReadme(opts)`** - Handles file operations
-6. **`makeCommitChanges(opts)`** - Commits changes to git
+6. **`makeCommitChanges(opts)`** - Commits changes to git, authenticating the remote with the
+   `GITHUB_TOKEN` input when one is configured
+7. **`renderBarChart(data, opts)`** (`src/lib/chart.ts`) - Vendored ASCII histogram renderer
 
 ### Data Flow
 
@@ -143,14 +166,20 @@ The application includes robust error handling for:
 
 All inputs are prefixed with `INPUT_` in the action environment:
 
-| Variable                   | Description           | Default                    | Validation        |
-| -------------------------- | --------------------- | -------------------------- | ----------------- |
-| `INPUT_CODESTATS_USERNAME` | CodeStats username    | -                          | Required, string  |
-| `INPUT_README_FILE`        | README file path      | `./README.md`              | Optional, string  |
-| `INPUT_SHOW_TITLE`         | Show timestamp header | `false`                    | Optional, boolean |
-| `INPUT_SHOW_LINK`          | Show profile link     | `false`                    | Optional, boolean |
-| `INPUT_GRAPH_WIDTH`        | Chart width           | `42`                       | Optional, number  |
-| `INPUT_COMMIT_MESSAGE`     | Git commit message    | `Update codestats metrics` | Optional, string  |
+| Variable                   | Description            | Default                    | Validation                      |
+| -------------------------- | ---------------------- | -------------------------- | ------------------------------- |
+| `INPUT_CODESTATS_USERNAME` | CodeStats username     | -                          | Required, string                |
+| `INPUT_GITHUB_USERNAME`    | Commit author identity | `github.repository_owner`  | Optional, string                |
+| `INPUT_GITHUB_TOKEN`       | Push authentication    | `github.token`             | Optional, string                |
+| `INPUT_README_FILE`        | README file path       | `./README.md`              | Optional, string                |
+| `INPUT_SHOW_TITLE`         | Show timestamp header  | `false`                    | Optional, exact string `"true"` |
+| `INPUT_SHOW_LINK`          | Show profile link      | `false`                    | Optional, exact string `"true"` |
+| `INPUT_GRAPH_WIDTH`        | Chart width            | `42`                       | Optional, number                |
+| `INPUT_COMMIT_MESSAGE`     | Git commit message     | `Update codestats metrics` | Optional, string                |
+
+Boolean inputs are compared against the literal string `"true"`, not cast with `Boolean(...)` —
+GitHub Actions always passes inputs as strings, so `Boolean("false")` would otherwise evaluate
+to `true`.
 
 ### API Integration
 
@@ -178,20 +207,16 @@ Expected response structure:
 
 ## 🚀 Release Process
 
-### Version Bumping
+Releases are automated with [Release Please](https://github.com/googleapis/release-please)
+(`.github/workflows/release-please.yml`):
 
-1. **Update version** in `package.json`
-2. **Update examples** in README.md with new version
-3. **Create git tag**: `git tag v0.1.0`
-4. **Push tag**: `git push origin v0.1.0`
+1. Merge Conventional Commits into `main` (`feat:`, `fix:`, …)
+2. Release Please opens/updates a release PR with the version bump and changelog
+3. Merging that PR creates the GitHub release and tag
+4. A follow-up job builds and pushes the Docker image to Docker Hub
+   (`vergissberlin/codestats-readme`), tagged with the new semver
 
-### GitHub Release
-
-Releases are created manually on GitHub with:
-
-- Release notes describing changes
-- Automatic Docker image build via GitHub Actions
-- Package registry updates
+Do not bump `package.json#version` or create tags manually — Release Please owns that.
 
 ### Branch Strategy
 
@@ -206,7 +231,7 @@ Releases are created manually on GitHub with:
 Set `INPUT_DEBUG=true` to enable verbose logging:
 
 ```bash
-INPUT_DEBUG=true INPUT_CODESTATS_USERNAME=username node index.js
+INPUT_DEBUG=true INPUT_CODESTATS_USERNAME=username pnpm run dev
 ```
 
 ### Common Issues
@@ -230,11 +255,11 @@ The application logs:
 
 ### Conventions
 
-- Use tabs for indentation
+- 2-space indentation (enforced by Prettier, no tabs)
 - Semicolons required
 - Single quotes for strings
 - Descriptive variable names
-- JSDoc comments for functions
+- Comments explain _why_, not _what_ — skip them where the code is self-explanatory
 
 ### Linting
 

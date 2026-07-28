@@ -1,18 +1,17 @@
 import * as fs from 'fs';
 import simpleGit from 'simple-git';
+import { renderBarChart } from './lib/chart.js';
 import type {
   AppOptions,
   EnvironmentVariables,
   LanguageChart,
+  LanguageData,
   RequestCallback,
   UpdateReadmeFunction,
   CommitChangesFunction,
   BarsOptions,
   CodeStatsApiResponse,
 } from './types/index.js';
-
-// Import bars module (no types available)
-const bars = require('bars') as (data: Record<string, number>, options: BarsOptions) => string;
 
 /**
  * Debug logging
@@ -32,6 +31,8 @@ export function createOptions(): AppOptions {
     throw new Error('InvalidArgumentException – The CODESTATS_USERNAME has to be set!');
   }
 
+  const gitUsername = env.INPUT_GITHUB_USERNAME ?? env.GITHUB_ACTOR ?? 'CodeStats bot';
+
   return {
     codestats: {
       username: env.INPUT_CODESTATS_USERNAME,
@@ -39,17 +40,25 @@ export function createOptions(): AppOptions {
       profile: `https://codestats.net/users/${env.INPUT_CODESTATS_USERNAME}`,
     },
     git: {
-      username: env.GITHUB_ACTOR ?? 'CodeStats bot',
+      username: gitUsername,
+      // `git commit --author` requires the "Name <email>" format; a bare
+      // username is not valid here, so fall back to GitHub's noreply
+      // convention (the same one github-actions[bot] itself uses).
+      author: `${gitUsername} <${gitUsername}@users.noreply.github.com>`,
       message: env.INPUT_COMMIT_MESSAGE ?? 'Update codestats metrics',
       token: env.INPUT_GITHUB_TOKEN ?? '',
+      repository: env.GITHUB_REPOSITORY ?? '',
     },
     graph: {
       width: Number(env.INPUT_GRAPH_WIDTH) || 42,
     },
     readmeFile: env.INPUT_README_FILE ?? './README.md',
     show: {
-      title: Boolean(env.INPUT_SHOW_TITLE) || false,
-      link: Boolean(env.INPUT_SHOW_LINK) || false,
+      // GitHub Actions passes every input as a string, so a workflow that sets
+      // `SHOW_TITLE: false` still yields the literal string "false" here —
+      // Boolean("false") is `true`, so only an explicit "true" may enable this.
+      title: env.INPUT_SHOW_TITLE === 'true',
+      link: env.INPUT_SHOW_LINK === 'true',
     },
   };
 }
@@ -88,8 +97,21 @@ export function makeCommitChanges(opts: AppOptions): CommitChangesFunction {
       git.status().catch((err) => console.error('Git status error:', err));
     }
 
-    git
-      .commit(opts.git.message, opts.readmeFile, { '--author': opts.git.username })
+    // Authenticate the push explicitly instead of relying on whatever
+    // credentials actions/checkout may (or may not) have persisted — this
+    // keeps the action working even when the caller's checkout step sets
+    // `persist-credentials: false`.
+    const authSetup =
+      opts.git.token && opts.git.repository
+        ? git.remote([
+            'set-url',
+            'origin',
+            `https://x-access-token:${opts.git.token}@github.com/${opts.git.repository}.git`,
+          ])
+        : Promise.resolve();
+
+    authSetup
+      .then(() => git.commit(opts.git.message, opts.readmeFile, { '--author': opts.git.author }))
       .then(() => git.push())
       .catch((err) => console.error('Git operations failed:', err));
   };
@@ -98,19 +120,17 @@ export function makeCommitChanges(opts: AppOptions): CommitChangesFunction {
 /**
  * Build chart with data
  */
-export function buildChart(data: Array<[string, any]>, width: number = 42): string {
-  let languageChart: LanguageChart = {};
+export function buildChart(data: Array<[string, unknown]>, width: number = 42): string {
+  const languageChart: LanguageChart = {};
 
   // Filter out invalid entries and ensure numeric xps values
-  const validData = data.filter(([key, value]) => {
-    return (
-      key &&
-      value &&
-      typeof value === 'object' &&
-      typeof value.xps === 'number' &&
-      value.xps >= 0 &&
-      isFinite(value.xps)
-    );
+  const validData = data.filter((entry): entry is [string, LanguageData] => {
+    const [key, value] = entry;
+    if (!key || typeof value !== 'object' || value === null) {
+      return false;
+    }
+    const xps = (value as { xps?: unknown }).xps;
+    return typeof xps === 'number' && xps >= 0 && isFinite(xps);
   });
 
   // Return empty string if no valid data
@@ -132,9 +152,9 @@ export function buildChart(data: Array<[string, any]>, width: number = 42): stri
 
   try {
     const barsOptions: BarsOptions = { bar: '█', width };
-    return bars(languageChart, barsOptions);
+    return renderBarChart(languageChart, barsOptions);
   } catch (error) {
-    // If bars library fails, return empty string
+    // If chart rendering fails, return empty string
     console.error('Chart generation failed:', error);
     return '';
   }

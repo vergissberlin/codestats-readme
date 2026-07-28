@@ -16,10 +16,10 @@
     "build:clean": "rm -rf dist && pnpm run build",
     "dev": "tsx src/index.ts",
     "lint": "pnpm run lint:ts && pnpm run lint:md",
-    "lint:ts": "eslint src/**/*.ts",
+    "lint:ts": "eslint src",
     "lint:md": "markdownlint-cli2 '**/*.md' '!node_modules/**/*'",
     "lint:fix": "pnpm run lint:ts:fix && pnpm run lint:md:fix",
-    "lint:ts:fix": "eslint src/**/*.ts --fix",
+    "lint:ts:fix": "eslint src --fix",
     "lint:md:fix": "markdownlint-cli2 '**/*.md' '!node_modules/**/*' --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -42,7 +42,6 @@
   },
   "homepage": "https://github.com/vergissberlin/codestats-readme#readme",
   "dependencies": {
-    "bars": "github:jstrace/bars",
     "simple-git": "^3.36.0"
   },
   "devDependencies": {
@@ -61,7 +60,6 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.2.0",
     "markdownlint-cli2": "^0.23.2",
-    "nock": "^14.0.16",
     "prettier": "^3.9.6",
     "tsx": "^4.23.1",
     "typescript": "^6.0.3",

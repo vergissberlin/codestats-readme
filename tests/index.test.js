@@ -181,4 +181,24 @@ describe('replaceCodestatsSection', () => {
     expect(result).toContain(header);
     expect(result).toContain(footer);
   });
+
+  it('logs and returns an empty string when markdown is not a string', () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const result = replaceCodestatsSection(null, 'CONTENT');
+
+    expect(result).toBe('');
+    expect(errorSpy).toHaveBeenCalledWith('replaceCodestatsSection: markdown must be a string');
+
+    errorSpy.mockRestore();
+  });
+
+  it('tolerates non-string content, header and footer by treating them as empty', () => {
+    const md = `<!-- START_SECTION:codestats -->\nold\n<!-- END_SECTION:codestats -->`;
+
+    const result = replaceCodestatsSection(md, undefined, null, 42);
+
+    expect(result).not.toContain('old');
+    expect(result).toContain('START_SECTION:codestats');
+  });
 });

@@ -4,16 +4,16 @@ description: 'Add a codestats coding activity graph in your readme file.'
 
 inputs:
   GITHUB_USERNAME:
-    description: 'Your GitHub username'
+    description: 'The GitHub username to attribute the commit to.'
     default: ${{ github.repository_owner }}
     required: false
   GITHUB_TOKEN:
-    description: 'Your GitHub toben'
+    description: 'GitHub token used to push the updated README (needs `contents: write`).'
     default: ${{ github.token }}
     required: false
 
   CODESTATS_USERNAME:
-    description: 'Your codestats username.'
+    description: 'Your CodeStats username.'
     required: true
 
   COMMIT_MESSAGE:
@@ -21,16 +21,23 @@ inputs:
     default: 'Update the graph with new CodeStats metrics.'
     required: false
 
+  README_FILE:
+    description: 'Path to the README file to update, relative to the repository root.'
+    default: './README.md'
+    required: false
+
   SHOW_TITLE:
-    description: 'Show a title with a Date.'
+    description: 'Show a title with a timestamp above the chart. Set to "true" to enable.'
+    default: 'false'
     required: false
 
   DEBUG:
-    description: 'Debug theaction'
+    description: 'Enable verbose debug logging of environment variables and git operations.'
     required: false
 
   SHOW_LINK:
-    description: 'Displayes a link to your codestat profile.'
+    description: 'Display a link to your CodeStats profile below the chart. Set to "true" to enable.'
+    default: 'false'
     required: false
 
   GRAPH_WIDTH:
@@ -38,10 +45,14 @@ inputs:
     default: '42'
     required: false
 
-# https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-javascript-actions
+# Docker-based action: the compiled dist/index.js is a build artifact and is
+# intentionally not committed to the repo, so a `node24` runtime pointing at a
+# root-level file would have nothing to run. The Dockerfile builds it as part
+# of the image instead.
+# https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-docker-container-actions
 runs:
-  using: 'node24'
-  main: 'index.js'
+  using: 'docker'
+  image: 'Dockerfile'
 
 branding:
   icon: 'info'

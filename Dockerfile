@@ -71,4 +71,7 @@ COPY --from=builder --chown=nodeuser:nodejs /build/dist ./dist
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
     CMD node -e "require.resolve('/app/dist/index.js')" || exit 1
 
-CMD ["node", "dist/index.js"]
+# Absolute path: GitHub Actions runs docker-container actions with the
+# working directory overridden to /github/workspace (the caller's checkout),
+# so a path relative to the image's own WORKDIR would not resolve there.
+ENTRYPOINT ["node", "/app/dist/index.js"]

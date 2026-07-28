@@ -6,8 +6,10 @@ export interface CodeStatsUser {
 
 export interface GitConfig {
   readonly username: string;
+  readonly author: string;
   readonly message: string;
   readonly token: string;
+  readonly repository: string;
 }
 
 export interface GraphConfig {
@@ -70,11 +72,13 @@ export interface EnvironmentVariables {
   readonly GITHUB_ACTOR?: string;
   readonly INPUT_COMMIT_MESSAGE?: string;
   readonly INPUT_GITHUB_TOKEN?: string;
+  readonly INPUT_GITHUB_USERNAME?: string;
   readonly INPUT_GRAPH_WIDTH?: string;
   readonly INPUT_README_FILE?: string;
   readonly INPUT_SHOW_TITLE?: string;
   readonly INPUT_SHOW_LINK?: string;
   readonly INPUT_DEBUG?: string;
+  readonly GITHUB_REPOSITORY?: string;
 }
 
 export interface BarsOptions {
