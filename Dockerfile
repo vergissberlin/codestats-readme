@@ -57,8 +57,13 @@ RUN chown -R nodeuser:nodejs /app
 USER nodeuser
 
 # Runtime dependencies only — no compiler, no test tooling.
+#
+# --ignore-scripts is required, not just tidy: --prod omits husky, but pnpm still
+# runs the root `prepare` script (`husky`), which then fails with
+# "sh: husky: not found". It is also the right default for a runtime image — none
+# of the production dependencies need an install script.
 COPY --chown=nodeuser:nodejs package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN pnpm install --frozen-lockfile --prod
+RUN pnpm install --frozen-lockfile --prod --ignore-scripts
 
 COPY --from=builder --chown=nodeuser:nodejs /build/dist ./dist
 
