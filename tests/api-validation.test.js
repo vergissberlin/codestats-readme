@@ -2,6 +2,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { buildChart, makeCallback, start, createOptions } from '../src/index.js';
 import { mockFetch, mockResponses, errorResponses } from './mocks/codestats-api.mock.js';
 
+// `start()` reaches makeUpdateReadme, which does real fs I/O against
+// opts.readmeFile (defaulting to ./README.md) unless fs is mocked here too —
+// without this, running this suite overwrites the repository's own README.md.
+vi.mock('fs');
+
 // Mock global fetch
 global.fetch = vi.fn();
 
