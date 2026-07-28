@@ -2,7 +2,9 @@ import js from '@eslint/js';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import securityPlugin from 'eslint-plugin-security';
-import nodePlugin from 'eslint-plugin-node';
+// eslint-plugin-n is the maintained successor of the abandoned eslint-plugin-node
+// (last released 2020) and is the only variant with flat-config/ESLint 10 support.
+import nodePlugin from 'eslint-plugin-n';
 
 export default [
   {
@@ -28,7 +30,7 @@ export default [
     plugins: {
       '@typescript-eslint': tsPlugin,
       security: securityPlugin,
-      node: nodePlugin,
+      n: nodePlugin,
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -37,10 +39,7 @@ export default [
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
-      '@typescript-eslint/explicit-function-return-type': [
-        'error',
-        { allowExpressions: true },
-      ],
+      '@typescript-eslint/explicit-function-return-type': ['error', { allowExpressions: true }],
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
