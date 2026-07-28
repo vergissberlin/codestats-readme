@@ -2,6 +2,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { buildChart, makeCallback, start, createOptions } from '../src/index.js';
 import { mockFetch, mockResponses, errorResponses } from './mocks/codestats-api.mock.js';
 
+// `start()` reaches makeUpdateReadme, which does real fs I/O against
+// opts.readmeFile (defaulting to ./README.md) unless fs is mocked here too —
+// without this, running this suite overwrites the repository's own README.md.
+vi.mock('fs');
+
 // Mock global fetch
 global.fetch = vi.fn();
 
@@ -11,7 +16,9 @@ describe('CodeStats API Validation & Regression Tests', () => {
     // Reset environment variables
     delete process.env.INPUT_CODESTATS_USERNAME;
     delete process.env.INPUT_GITHUB_TOKEN;
+    delete process.env.INPUT_GITHUB_USERNAME;
     delete process.env.GITHUB_ACTOR;
+    delete process.env.GITHUB_REPOSITORY;
     delete process.env.INPUT_README_FILE;
     delete process.env.INPUT_GRAPH_WIDTH;
     delete process.env.INPUT_SHOW_TITLE;
@@ -263,6 +270,60 @@ describe('CodeStats API Validation & Regression Tests', () => {
       expect(options.show.title).toBe(false);
       expect(options.show.link).toBe(false);
       expect(options.git.message).toBe('Update codestats metrics');
+    });
+
+    it('should treat the literal string "false" as disabled for boolean inputs', () => {
+      // GitHub Actions always passes inputs as strings, so a workflow with
+      // `SHOW_TITLE: false` yields INPUT_SHOW_TITLE="false" here — a naive
+      // Boolean() cast would treat that non-empty string as truthy.
+      process.env.INPUT_CODESTATS_USERNAME = 'testuser';
+      process.env.INPUT_SHOW_TITLE = 'false';
+      process.env.INPUT_SHOW_LINK = 'false';
+
+      const options = createOptions();
+
+      expect(options.show.title).toBe(false);
+      expect(options.show.link).toBe(false);
+    });
+
+    it('should enable boolean inputs only for the literal string "true"', () => {
+      process.env.INPUT_CODESTATS_USERNAME = 'testuser';
+      process.env.INPUT_SHOW_TITLE = 'true';
+      process.env.INPUT_SHOW_LINK = 'true';
+
+      const options = createOptions();
+
+      expect(options.show.title).toBe(true);
+      expect(options.show.link).toBe(true);
+    });
+
+    it('should prefer INPUT_GITHUB_USERNAME over GITHUB_ACTOR for the git identity', () => {
+      process.env.INPUT_CODESTATS_USERNAME = 'testuser';
+      process.env.INPUT_GITHUB_USERNAME = 'configured-user';
+      process.env.GITHUB_ACTOR = 'actor-user';
+
+      const options = createOptions();
+
+      expect(options.git.username).toBe('configured-user');
+      expect(options.git.author).toBe('configured-user <configured-user@users.noreply.github.com>');
+    });
+
+    it('should fall back to GITHUB_ACTOR then a generic bot name for the git identity', () => {
+      process.env.INPUT_CODESTATS_USERNAME = 'testuser';
+      delete process.env.INPUT_GITHUB_USERNAME;
+      process.env.GITHUB_ACTOR = 'actor-user';
+
+      expect(createOptions().git.username).toBe('actor-user');
+
+      delete process.env.GITHUB_ACTOR;
+      expect(createOptions().git.username).toBe('CodeStats bot');
+    });
+
+    it('should read the repository slug from GITHUB_REPOSITORY for authenticated pushes', () => {
+      process.env.INPUT_CODESTATS_USERNAME = 'testuser';
+      process.env.GITHUB_REPOSITORY = 'owner/repo';
+
+      expect(createOptions().git.repository).toBe('owner/repo');
     });
   });
 
