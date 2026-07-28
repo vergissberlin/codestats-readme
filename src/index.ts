@@ -26,7 +26,7 @@ if (typeof process.env.INPUT_DEBUG !== 'undefined') {
  */
 export function createOptions(): AppOptions {
   const env = process.env as EnvironmentVariables;
-  
+
   // Validate environment variables
   if (typeof env.INPUT_CODESTATS_USERNAME === 'undefined') {
     throw new Error('InvalidArgumentException – The CODESTATS_USERNAME has to be set!');
@@ -87,7 +87,7 @@ export function makeCommitChanges(opts: AppOptions): CommitChangesFunction {
       console.log('::: Commit changes');
       git.status().catch((err) => console.error('Git status error:', err));
     }
-    
+
     git
       .commit(opts.git.message, opts.readmeFile, { '--author': opts.git.username })
       .then(() => git.push())
@@ -120,7 +120,7 @@ export function buildChart(data: Array<[string, any]>, width: number = 42): stri
 
   validData.sort((a, b) => b[1].xps - a[1].xps);
   const topLanguages = validData.slice(0, 6);
-  
+
   topLanguages.forEach(([key, value]) => {
     languageChart[key] = value.xps;
   });
