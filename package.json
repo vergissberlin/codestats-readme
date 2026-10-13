@@ -52,7 +52,7 @@
     "@typescript-eslint/eslint-plugin": "^8.65.0",
     "@typescript-eslint/parser": "^8.65.0",
     "@typescript/native": "npm:typescript@^7.0.2",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/coverage-v8": "^5.0.0",
     "commitizen": "^4.3.2",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^10.8.0",
@@ -64,7 +64,7 @@
     "prettier": "^3.9.6",
     "tsx": "^4.23.1",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
-    "vitest": "^4.1.10"
+    "vitest": "^5.0.0"
   },
   "config": {
     "commitizen": {
