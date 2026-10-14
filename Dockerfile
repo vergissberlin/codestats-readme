@@ -2,7 +2,7 @@
 
 # Pin base image by tag *and* digest for reproducible, verifiable builds.
 # node:24.18.0-alpine — Node.js 24 "Krypton" is the current Active LTS line.
-ARG NODE_IMAGE=node:24.18.0-alpine@sha256:a0b9bf06e4e6193cf7a0f58816cc935ff8c2a908f81e6f1a95432d679c54fbfd
+ARG NODE_IMAGE=node:24.22.0-alpine@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f
 
 # ---------------------------------------------------------------------------
 # Stage 1 — build
